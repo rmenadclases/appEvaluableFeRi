@@ -62,8 +62,13 @@
             <br>
             <form action="recogeryValidar.php" method="post">
 
+<<<<<<< HEAD
                 <?php if (isset($errores['username/password'])): ?>
                 <p class="errores"><?= $errores['username/password'] ?></p><br>
+=======
+                <?php if (isset($errores['username'])): ?>
+                <p class="errores"><?= $errores['username'] ?></p><br>
+>>>>>>> 8f4b9a6f74e94379eb46dca2511d8c8010c77916
                 <?php endif; ?>
                 <input type="text" id="username" name="username" placeholder="Username" required class="username"><br>
                 <input type="password" id="password" name="password" placeholder="Password" required class="password"><br>

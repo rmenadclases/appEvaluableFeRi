@@ -5,6 +5,7 @@
  * 
  */
 
+
 function cabecera($titulo = "") // el archivo actual
 {
     ?>
@@ -20,6 +21,8 @@ function cabecera($titulo = "") // el archivo actual
 
     <body>
         <?php
+
+
 }
 
 function pie()
@@ -41,7 +44,9 @@ function pie()
  * @return string
  */
 
-function sinTildes($frase): string
+
+function sinTildes($frase):string
+
 {
     $no_permitidas = array(
         "á",
@@ -119,10 +124,13 @@ function sinEspacios($frase)
 
 function recoge(string $var)
 {
-    if (isset($_REQUEST[$var]) && (!is_array($_REQUEST[$var]))) {
-        $tmp = sinEspacios($_REQUEST[$var]);
+
+    if (isset($_REQUEST[$var])&&(!is_array($_REQUEST[$var]))){
+        $tmp=sinEspacios($_REQUEST[$var]);
         $tmp = strip_tags($tmp);
-    } else
+    }
+    else
+
         $tmp = "";
 
     return $tmp;
@@ -137,18 +145,18 @@ function recoge(string $var)
  * @return array
  */
 
-function recogeArray(string $var): array
+
+function recogeArray(string $var):array
 {
-    $array = [];
-    if (isset($_REQUEST[$var]) && (is_array($_REQUEST[$var]))) {
-        foreach ($_REQUEST[$var] as $valor)
-            $array[] = strip_tags(sinEspacios($valor));
-
+    $array=[];
+    if (isset($_REQUEST[$var])&&(is_array($_REQUEST[$var]))){
+        foreach($_REQUEST[$var] as $valor)
+        $array[]=strip_tags(sinEspacios($valor));
+        
     }
-
+    
     return $array;
-}
-
+}   
 
 
 //***** Funciones de validación **** //
@@ -169,16 +177,19 @@ function recogeArray(string $var): array
  */
 
 
-function cTexto(string $text, string $campo, array &$errores, int $max = 30, int $min = 1, bool $espacios = TRUE, bool $case = TRUE): bool
+
+function cTexto(string $text, string $campo, array &$errores, int $max = 30, int $min = 1, bool $espacios = TRUE, bool $case = TRUE):bool
 {
-    $case = ($case === TRUE) ? "i" : "";
-    $espacios = ($espacios === TRUE) ? " " : "";
+    $case=($case===TRUE)?"i":"";
+    $espacios=($espacios===TRUE)?" ":"";
     if ((preg_match("/^[a-zñ$espacios]{" . $min . "," . $max . "}$/u$case", sinTildes($text)))) {
         return true;
     }
     $errores[$campo] = "Error en el campo $campo";
-    return false;
+
+     return false;
 }
+    
 
 //***** Funciones de validación **** //
 
@@ -193,6 +204,7 @@ function cTexto(string $text, string $campo, array &$errores, int $max = 30, int
  * @param bool $requerido
  * @param integer $max
  * @return bool
+<<<<<<< HEAD
  */
 function cNum(string $num, string $campo, array &$errores, bool $requerido = TRUE, int $max = PHP_INT_MAX): bool
 {
@@ -310,7 +322,7 @@ function comprobarCorreo(string $correoElectronico,string $campo,array &$errores
         $errores[$campo] = 'El correo no es correcto';
     return false;
     }
-}
+
 
 /**
  * Funcion cRadio
@@ -325,6 +337,7 @@ function comprobarCorreo(string $correoElectronico,string $campo,array &$errores
  * 
  * @return boolean
  */
+
 function cRadio(string $text, string $campo, array &$errores, array $valores, bool $requerido = TRUE)
 {
     if (in_array($text, $valores)) {
@@ -355,6 +368,7 @@ function cRadio(string $text, string $campo, array &$errores, array $valores, bo
  * @return boolean
  */
 
+
 function cCheck(array $text, string $campo, array &$errores, array $valores, bool $requerido = TRUE)
 {
 
@@ -367,7 +381,6 @@ function cCheck(array $text, string $campo, array &$errores, array $valores, boo
             $errores[$campo] = "Error en el campo $campo";
             return false;
         }
-
     }
     return true;
 }
@@ -387,6 +400,7 @@ function cCheck(array $text, string $campo, array &$errores, array $valores, boo
  * @param boolean $required
  * @return boolean|string
  */
+<<<<<<< HEAD
 function cFile(string $nombre, array &$errores, array $extensionesValidas, string $directorio, int  $max_file_size,  bool $required = false)
 {
     $nombreArchivo = $_FILES['imagen']['name'];
@@ -397,10 +411,20 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
         return true;
     // En cualquier otro caso se comprueban los errores del servidor 
     if ($_FILES[$nombre]['error'] != 0) {
+=======
+function cFile(string $nombre, array &$errores, array $extensiones_validas, string $directorio, int  $max_file_size,  bool $required = TRUE): bool|string
+{
+
+    if ((!$required) && $_FILES[$nombre]['error'] === 4)  // el campo de file no es requerido y no se intenta subir ningun archivo
+        return true;
+
+    if ($_FILES[$nombre]['error'] != 0) {                   // se comprueban los errores del servidor 
+>>>>>>> 8f4b9a6f74e94379eb46dca2511d8c8010c77916
         $errores["$nombre"] = "Error al subir el archivo " . $nombre . ". Prueba de nuevo";
         return false;
     } else {
 
+<<<<<<< HEAD
         $nombreArchivo = strip_tags($_FILES[$nombre]['name']);
         /*
              * Guardamos nombre del fichero en el servidor
@@ -429,11 +453,26 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
         if ($tamanyoFile > $max_file_size) {
             $errores["$nombre"] = "La imagen debe de tener un tamaño inferior a $max_file_size kb";
             return false;
+=======
+        $nombreArchivo_original = strip_tags($_FILES[$nombre]['name']);
+        $filesize = $_FILES[$nombre]['size'];
+        $directorioTemp = $_FILES[$nombre]['tmp_name'];
+        $arrayInfoArchivo = pathinfo($nombreArchivo_original);
+
+        $extension = $arrayInfoArchivo['extension'];
+        if (!in_array($extension, $extensiones_validas)) {
+            $errores["$nombre"] = "La extensión del archivo no es válida o no se ha subido ningún archivo";
+        }
+        // Comprobamos el tamaño del archivo
+        if ($filesize > $max_file_size) {
+            $errores["$nombre"] = "La imagen debe de tener un tamaño inferior a 50 kb";
+>>>>>>> 8f4b9a6f74e94379eb46dca2511d8c8010c77916
         }
 
         // Almacenamos el archivo en ubicación definitiva si no hay errores ( al compartir array de errores TODOS LOS ARCHIVOS tienen que poder procesarse para que sea exitoso. Si cualquiera da error, NINGUNO  se procesa)
 
         if (empty($errores)) {
+<<<<<<< HEAD
             /**
              * Comprobamos si el directorio pasado es válido
              */
@@ -471,4 +510,22 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
 
 
 
+=======
+            $nombreArchivo = $arrayInfoArchivo['filename'] . time();
+            $nombreCompleto = $directorio . $nombreArchivo . "." . $extension;
+            // Movemos el fichero a la ubicación definitiva
+            if (move_uploaded_file($directorioTemp, $nombreCompleto)) {
+
+                return  $nombreArchivo;
+            } else {
+                $errores["$nombre"] = "Error: No se puede mover el fichero a su destino";
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+}
+
+>>>>>>> 8f4b9a6f74e94379eb46dca2511d8c8010c77916
 ?>
