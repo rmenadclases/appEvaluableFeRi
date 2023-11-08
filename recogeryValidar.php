@@ -138,6 +138,7 @@ $cFecha=calcularFecha($fechaNacimiento, "fecha", $errores);
 
 if (isset($_REQUEST['bCerrarSesion'])) {
     header("location: Login.html"); // Redirige al usuario
+
 }
 
 //pie();

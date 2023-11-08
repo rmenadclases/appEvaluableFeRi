@@ -5,6 +5,7 @@
  * 
  */
 
+
 function cabecera($titulo = "") // el archivo actual
 {
     ?>
@@ -20,6 +21,7 @@ function cabecera($titulo = "") // el archivo actual
 
     <body>
         <?php
+
 }
 
 function pie()
@@ -41,7 +43,9 @@ function pie()
  * @return string
  */
 
+
 function sinTildes($frase): string
+
 {
     $no_permitidas = array(
         "á",
@@ -119,10 +123,12 @@ function sinEspacios($frase)
 
 function recoge(string $var)
 {
+
     if (isset($_REQUEST[$var]) && (!is_array($_REQUEST[$var]))) {
         $tmp = sinEspacios($_REQUEST[$var]);
         $tmp = strip_tags($tmp);
     } else
+
         $tmp = "";
 
     return $tmp;
@@ -136,6 +142,7 @@ function recoge(string $var)
  * @param string $var
  * @return array
  */
+
 
 function recogeArray(string $var): array
 {
@@ -169,16 +176,20 @@ function recogeArray(string $var): array
  */
 
 
+
 function cTexto(string $text, string $campo, array &$errores, int $max = 30, int $min = 1, bool $espacios = TRUE, bool $case = TRUE): bool
 {
     $case = ($case === TRUE) ? "i" : "";
     $espacios = ($espacios === TRUE) ? " " : "";
+
     if ((preg_match("/^[a-zñ$espacios]{" . $min . "," . $max . "}$/u$case", sinTildes($text)))) {
         return true;
     }
     $errores[$campo] = "Error en el campo $campo";
+
     return false;
 }
+
 
 //***** Funciones de validación **** //
 
@@ -193,6 +204,7 @@ function cTexto(string $text, string $campo, array &$errores, int $max = 30, int
  * @param bool $requerido
  * @param integer $max
  * @return bool
+
  */
 function cNum(string $num, string $campo, array &$errores, bool $requerido = TRUE, int $max = PHP_INT_MAX): bool
 {
@@ -310,7 +322,9 @@ function comprobarCorreo(string $correoElectronico,string $campo,array &$errores
         $errores[$campo] = 'El correo no es correcto';
     return false;
     }
+
 }
+
 
 /**
  * Funcion cRadio
@@ -367,7 +381,6 @@ function cCheck(array $text, string $campo, array &$errores, array $valores, boo
             $errores[$campo] = "Error en el campo $campo";
             return false;
         }
-
     }
     return true;
 }
@@ -387,6 +400,7 @@ function cCheck(array $text, string $campo, array &$errores, array $valores, boo
  * @param boolean $required
  * @return boolean|string
  */
+
 function cFile(string $nombre, array &$errores, array $extensionesValidas, string $directorio, int  $max_file_size,  bool $required = false)
 {
     $nombreArchivo = $_FILES['imagen']['name'];
@@ -400,7 +414,6 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
         $errores["$nombre"] = "Error al subir el archivo " . $nombre . ". Prueba de nuevo";
         return false;
     } else {
-
         $nombreArchivo = strip_tags($_FILES[$nombre]['name']);
         /*
              * Guardamos nombre del fichero en el servidor
@@ -468,7 +481,4 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
 
     }
 }
-
-
-
 ?>
