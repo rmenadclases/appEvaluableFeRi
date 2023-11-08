@@ -54,32 +54,65 @@
 
      <div class="container" >
         <div class="signup-space">
-            <div class="logo-container">
-                <a href="index1.html"><img src="./images/LogoTechSinFondoBlanco.png" alt="Logo" class="centered-logo"></a>
+            <div class="contenedorIzquierdo">
+           <button style="background-color: white;" >Modificar Perfil</button>'
+           <button style="background-color: white; name='cServicios'" >Crear servicio</button>'
             </div>
-            <h2>Crea tu cuenta</h2>
+            
+            <h2>PERFIL</h2>
             <br>
             <form action="recogeryValidar.php" method="post">
-                <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="Nombre Completo" required class="username"><br>
-                <input type="text" id="correoElectronico" name="correoElectronico" placeholder="Correo Electronico" required class="username"><br>
-                <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required class="username"><br>
-                <input type="password" id="password" name="password" placeholder="Password" required class="password"><br>
-                <br>
-                <label for="fecha" class="username">Selecciona una fecha:</label>
-                <br>
-                <input type="date" name="fecha" id="fecha">
-                <br>
-                <br>
-                <a href="Login.html">Ya tienes cuenta?Iniciar Sesion</a>
-                <br>
-                <br>
-                <button type="submit" name="bAceptar" value="aceptar">Crear cuenta</button>
+            <?php
+        session_start();
+        if (isset($_SESSION["nombreCompleto"])) {
+            $nombreCompleto= $_SESSION["nombreCompleto"];
+            echo '<p style="color: white;">Nombre completo: <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="nombreCompleto" required class="password" value="' . $nombreCompleto . '" readonly></p>';        
+        } else {
+            echo 'No se ha iniciado sesión.';
+        }
+        if (isset($_SESSION["username"])) {
+            $nombreDeUsuario = $_SESSION["username"];
+            echo '<p style="color: white;">Nombre usuario: <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required class="username" value="' . $nombreDeUsuario . '" readonly></p>';        
+        } else {
+            echo 'No se ha iniciado sesión.';
+        }
+        if (isset($_SESSION["correoElectronico"])) {
+            $correoElectronico= $_SESSION["correoElectronico"];
+            echo '<p style="color: white;">Correo Electronico: <input type="text" id="correoElectronico" name="correoElectronico" placeholder="correoElectronico" required class="password" value="' . $correoElectronico . '" readonly></p>';        
+        } else {
+            echo 'No se ha iniciado sesión.';
+        }
+        if (isset($_SESSION["password"])) {
+            $password = $_SESSION["password"];
+            echo '<p style="color: white;">Contraseña: <input type="text" id="password" name="password" placeholder="password" required class="password" value="' . $password . '" readonly></p>';        
+        } else {
+            echo 'No se ha iniciado sesión.';
+        }
+        if (isset($_SESSION["foto"])) {
+            $imagen = $_SESSION["foto"];
+            echo '    <img src="' . $imagen . '" alt="Descripción de la imagen"  width="150" height="150" >';
+        } else {
+            echo 'No hay imagen';
+        }
+        if (isset($_SESSION["idioma"])) {
+            $idioma = $_SESSION["idioma"];
+            echo '<p style="color: white;">Idiomas seleccionados: <input type="text" id="idioma" name="idioma"  required class="password" value="' . $idioma . '" readonly></p>';        
+        } else {
+            echo 'No seleccionó ningún idioma';
+        }
+        echo '<br>';
+       echo '<button name="bCerrarSesion" style="background-color: white;"">Cerrar sesión</button>'
+        ?>
             </form>
         </div>
     </div>
 </body>
 
 <style>
+    .contenedorIzquierdo{
+        display: flex;
+        justify-content: flex-end;
+    }
    h2{
     color: white;
     margin-left: 90px;
@@ -97,6 +130,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow:visible;
     
    }
    .username{

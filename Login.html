@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="height-full" data-a11y-animated-images="system" data-a11y-link-underlines="true"
     data-turbo-loaded="">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <head>
     <style type="text/css">
@@ -58,20 +60,27 @@
             </div>
             <h2>Login</h2>
             <br>
-            <form action="procesar_formulario.php" method="post">
+            <form action="recogeryValidar.php" method="post">
+
+                <?php if (isset($errores['username/password'])): ?>
+                <p class="errores"><?= $errores['username/password'] ?></p><br>
+                <?php endif; ?>
                 <input type="text" id="username" name="username" placeholder="Username" required class="username"><br>
                 <input type="password" id="password" name="password" placeholder="Password" required class="password"><br>
                 <br>
                 <a href="crearCuenta.html">No tienes cuenta aún?</a>
                 <br>
                 <br>
-                <button type="submit">Entrar</button>
+                <button type="submit" name="bAceptar" value="aceptar">Entrar</button>
             </form>
         </div>
     </div>
 </body>
 
 <style>
+    .errores{
+        color: red;
+    }
    h2{
     color: white;
     margin-left: 90px;
