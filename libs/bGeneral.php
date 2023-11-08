@@ -287,6 +287,23 @@ function creayValidaConexion(string $nombre, string $password, string $campo,arr
     return false;
 }
 
+function creayValidaConexion2(string $correo, string $password, string $campo,array &$errores,string $idioma,string $imagen ){
+    session_start();
+    foreach ($_SESSION['usuarios'] as $usuario) {
+        if ($usuario['datos']['correoElectronico'] === $correo){
+            $_SESSION["username"] = $usuario["usuario"];
+            $_SESSION["password"] = $password;
+            $_SESSION["nombreCompleto"] = $usuario['datos']['nombreCompleto'];
+            $_SESSION["correoElectronico"] = $usuario['datos']['correoElectronico'];
+            $_SESSION["foto"] = $imagen;
+            $_SESSION["idioma"] = $idioma;
+            return true;
+
+        }
+    }
+
+}
+
 function calcularFecha(string $fechaNacimiento,string $campo,array &$errores)
 {
     // Calcula la edad a partir de la fecha de nacimiento
