@@ -55,7 +55,7 @@
      <div class="container" >
         <div class="signup-space">
             <div class="contenedorIzquierdo">
-           <button style="background-color: white;" >Modificar Perfil</button>'
+            <a href="modificarPerfil.php"> <button style="background-color: white;" >Modificar Perfil</button></a>'
            <button style="background-color: white; name='cServicios'" >Crear servicio</button>'
             </div>
             

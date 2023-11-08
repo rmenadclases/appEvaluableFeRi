@@ -79,6 +79,12 @@
                 <p class="errores"><?= $errores['correoElectronico'] ?></p><br>
                 <?php endif; ?>
                 <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required class="username"><br>
+                
+                <?php if (isset($errores['username/password'])): ?>
+                <br>
+               <p class="errores"><?= $errores['username/password'] ?></p><br>
+               <?php endif; ?>
+
                 <input type="password" id="password" name="password" placeholder="Password" required class="password"><br>
                 <br>
                 <label for="fecha" class="username" >Selecciona una fecha:</label>

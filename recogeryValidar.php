@@ -107,7 +107,7 @@ $cFecha=calcularFecha($fechaNacimiento, "fecha", $errores);
             print_r($_FILES);
         }
         $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);
-        if ($file == false) {
+        if ($file == true) {
             $file = "./imagenesUsuario/dump.jpg";
         }
         if (creayValidaConexion1($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file,$idiomaString)) {
@@ -115,7 +115,7 @@ $cFecha=calcularFecha($fechaNacimiento, "fecha", $errores);
             header("location: Login.html"); // Redirige al usuario
             $primeraVez = false;
         } else {
-            include('crearCuenta.html');
+            include('crearCuenta.php');
         }
         }
     } else {
@@ -154,7 +154,7 @@ if (isset($_REQUEST['bGuardar'])) {
         if ((!isset($_FILES['imagen'])) || ($_FILES['imagen']['error'] != 0)) {
             $errores["imagen"] = "Error en la imagen";
         }
-        $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);
+        $file = cfile($imagen, $errores, $extensionesValidas, $dir, $max_file_size);
         if ($file == false) {
             $file = "./imagenesUsuario/dump.jpg";
         }
