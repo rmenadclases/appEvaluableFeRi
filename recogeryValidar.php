@@ -17,6 +17,8 @@ $nombreCompleto = "";
 $correoElectronico = "";
 $fechaNacimiento = "";
 $idiomas = array("español", "ingles", "chino");
+//array para check de los servicios
+$servicios=array("Mañanas", "Tardes", "Noches", "Fines de Semana");
 
 //Tratamiento de imagenes
 $dir = "./imagenesUsuario"; //Sustituye pro el directorio actual
@@ -54,9 +56,6 @@ if (isset($_REQUEST['bAceptar'])) {
 
 }
 
-
-
-
 /*
     //si el email recogido en la variable es igual a otro email que me creo yo en una variable
     //header location a la zona que quiera
@@ -79,15 +78,10 @@ if (isset($_REQUEST['bRegistro'])) {
     $correoElectronico = recoge("correoElectronico");
     $fechaNacimiento = recoge("fecha");
     $imagen = recoge("imagen");
-   $idioma=recogeArray("idioma");
+    $idioma=recogeArray("idioma");
   
     $descripcionPersonal=recoge("descripcion");
   
-
-
-
-
-
 
 
 
@@ -112,7 +106,7 @@ $cFecha=calcularFecha($fechaNacimiento, "fecha", $errores);
         }
         if (creayValidaConexion1($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file,$idiomaString)) {
             $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión
-            header("location: Login.html"); // Redirige al usuario
+            header("location: profile1.php"); // Redirige al usuario
             $primeraVez = false;
         } else {
             include('crearCuenta.php');
