@@ -263,7 +263,7 @@ function creayValidaConexion1(string $nombre, string $password, string $campo, a
 }
 
 
-function creayValidaConexion(string $nombre, string $password, string $campo,array &$errores, string $nombreCompleto, string $correoElectronico){
+function creayValidaConexion(string $nombre, string $password, string $campo,array &$errores){
     session_start();
     if($_SESSION['usuarios']==""){
         $_SESSION['usuarios']="";

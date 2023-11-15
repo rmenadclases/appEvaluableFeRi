@@ -56,11 +56,11 @@
      <div class="container" >
         <div class="signup-space">            
             <div class="logo-container">
-                <a href="index1.html"><img src="./images/LogoTechSinFondoBlanco.png" alt="Logo" class="centered-logo"></a>
+                <a href="index1.html"><img src="../images/LogoTechSinFondoBlanco.png" alt="Logo" class="centered-logo"></a>
             </div>
             <h2>Login</h2>
             <br>
-            <form action="recogeryValidar.php" method="post">
+            <form action="./validadores/validaLogin.php" method="post">
 
                 <?php if (isset($errores['username/password'])): ?>
                 <p class="errores"><?= $errores['username/password'] ?></p><br>
