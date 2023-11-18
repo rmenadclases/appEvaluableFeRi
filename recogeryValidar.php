@@ -1,6 +1,6 @@
 <?php
-include('libs/bGeneral.php');
-include('libs/componentes.php');
+//include('libs/bGeneral.php');
+//include('libs/componentes.php');
 //cabecera();
 $error = false;
 $primeraVez = true;

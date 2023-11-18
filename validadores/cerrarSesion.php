@@ -1,5 +1,5 @@
 <?php
 if (isset($_REQUEST['bCerrarSesion'])) {
-    header("location: ../Login.html"); // Redirige al usuario
+    header("location: ../plantilla/Login.html"); // Redirige al usuario
 }
 ?>
