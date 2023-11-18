@@ -1,11 +1,10 @@
 ﻿<?php
 /****
  * Librería con funciones generales y de validación
- * @author Heike Bonilla
  * 
  */
 
-function cabecera($titulo = "") // el archivo actual
+//function cabecera($titulo = "") // el archivo actual
 {
     ?>
     <!DOCTYPE html>
@@ -22,7 +21,7 @@ function cabecera($titulo = "") // el archivo actual
         <?php
 }
 
-function pie()
+//function pie()
 {
     echo "</body>
 	</html>";
@@ -30,7 +29,6 @@ function pie()
 
 
 //***** Funciones de sanitización **** //
-
 
 /**
  * funcion sinTildes
@@ -187,7 +185,7 @@ function cTexto(string $text, string $campo, array &$errores, int $max = 30, int
  *
  * Valida que un string sea numerico menor o igual que un número y si es o no requerido
  * 
- * @param string $text
+ * @param string $num
  * @param string $campo
  * @param array $errores
  * @param bool $requerido
@@ -257,34 +255,83 @@ function creayValidaConexion1(string $nombre, string $password, string $campo, a
         }
 
         $_SESSION["usuarios"] = $datosSesion;
-        
+        //NUEVA FUNCIONALIDAD GUARDAMOS LOS DATOS EN UN FICHERO
+        $archivo="../almacenamientoFicheros/usuarios.txt";
+        if (is_file($archivo)) {
+            $fp = fopen($archivo, "r");
+            $escribir = fopen($archivo, "a");
+            while (!feof($fp)){
+                //Lectura
+                $linea = fgets($fp);                                     
+            }
+            fwrite($escribir, $nombreCompleto."?".$password."?".$nombre."?".$correoElectronico."?".$imagen."?".$idioma.PHP_EOL); 
+            fclose($fp);
+            fclose($escribir);
+            
+        }else{
+            //Si no que cree el archivo
+        }
         return true;
     }
 }
 
 
-function creayValidaConexion(string $nombre, string $password, string $campo,array &$errores){
+function creayValidaConexion(string $correoElectronico, string $password, string $campo,array &$errores){
     session_start();
-    if($_SESSION['usuarios']==""){
-        $_SESSION['usuarios']="";
-        $errores['username/password'] = 'Nombre de usuario o contraseña no existen';
-        return false;
-    }else{
-    foreach ($_SESSION['usuarios'] as $usuario) {
-        if ($usuario['datos']['correoElectronico'] === $nombre && $usuario['datos']['password'] === $password) {
-            $_SESSION["username"] = $nombre;
+//DEBUGUEAR
+
+    $archivo="../almacenamientoFicheros/usuarios.txt";
+    $fp = fopen($archivo, "r");
+    while (!feof($fp)){
+        //Lectura
+        $linea = fgets($fp);   
+        $datos = explode('?', $linea);  
+        $correo = $datos[3];
+        $contrasenia = $datos[1];   
+        // Almacena los datos en el array de usuarios
+        if ($correo == $correoElectronico && $contrasenia == $password) {
+            //fwrite($escribir, $nombreCompleto."?".$password."?".$nombre."?".$correoElectronico."?".$imagen."?".$idioma.PHP_EOL); 
+            $_SESSION["nombreCompleto"] = $datos[0];
+            $_SESSION["password"] = $datos[1];
+            $_SESSION["username"] = $datos[2];
+            $_SESSION["correoElectronico"] = $datos[3];
+            $_SESSION["foto"] = $datos[4];
+            $_SESSION["idioma"] = $datos[5];
+            return true; // Las credenciales coinciden
+        }
+        /*
+        $usuarios[] = array(
+            "correoElectronico" => $correo,
+            "contrasenia" => $contrasenia
+        );*/
+    }
+    
+    fclose($fp);
+    return true; // Las credenciales coinciden
+    /*
+    foreach ($usuarios as $usuario) {
+        $correo = $usuario["correoElectronico"];
+        $contrasenia = $usuario["contrasenia"];
+        if ($correo == $correoElectronico && $contrasenia == $password) {
+            //Volver abrir el archivo para acceder a la informacion del usuario o posiicon del usuairo
+            $_SESSION["correoElectronico"] = $correoElectronico;
             $_SESSION["password"] = $password;
             $_SESSION["nombreCompleto"] = $usuario['datos']['nombreCompleto'];
-            $_SESSION["correoElectronico"] = $usuario['datos']['correoElectronico'];
+            $_SESSION["username"] = $usuario['datos']['username'];
             $_SESSION["foto"] = $usuario['datos']['foto'];
             $_SESSION["idioma"] = $usuario['datos']['idioma'];
             return true; // Las credenciales coinciden
+        }else{
+            $errores['username/password'] = 'Nombre de usuario o contraseña incorrectos';
+            //Escribe el usuairo y contraseña y fecha actual en el archivo logLogin.txt
+            $fecha_actual = date("Y-m-d H:i:s");
+            $archivo="../almacenamientoFicheros/logLogin.txt";
+            $escribir = fopen($archivo, "a");
+            fwrite($escribir, $correoElectronico." ".$password." ".$fecha_actual.PHP_EOL);
+            fclose($escribir);
+            return false;
         }
-    }
-}
-    // Si llegamos aquí, significa que las credenciales no coinciden
-    $errores['username/password'] = 'Nombre de usuario o contraseña incorrectos';
-    return false;
+    }*/        
 }
 
 function creayValidaConexion2(string $correo, string $password, string $campo,array &$errores,string $idioma,string $imagen ){
@@ -408,7 +455,7 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
 {
     $nombreArchivo = $_FILES['imagen']['name'];
 
-    $_FILES["archivo"];
+   // $_FILES["archivo"];
     // Caso especial que el campo de file no es requerido y no se intenta subir ningun archivo
     if ((!$required) && $_FILES[$nombre]['error'] === 4)
         return true;
