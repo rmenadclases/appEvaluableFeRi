@@ -228,7 +228,6 @@ function crearServicio(string $titulo, array $categoria, string $descripcion, st
         return true;
     }
 
-$primeraVez = true;
 function creayValidaConexion1(string $nombre, string $password, string $campo, array &$errores, string $nombreCompleto, string $correoElectronico,string $imagen,string $idioma)
 {
     session_start();

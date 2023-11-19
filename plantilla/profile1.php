@@ -35,6 +35,7 @@
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
+                <div class "signup-stars"></div>
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
             </div>
@@ -53,6 +54,7 @@
                 <div class="contenedorIzquierdo">
                     <a href="../plantilla/modificarPerfil.php"> <button style="background-color: white;">Modificar Perfil</button></a>
                     <a href="../plantilla/formServicios.php"><button style="background-color: white; name='cServicios'">Crear servicio</button></a>
+                    <a href="./formServicios.php"><button style="background-color: white; name='cServicios'">Crear servicio</button></a>
                 </div>
             </div>
             <div class="form-container">
@@ -81,6 +83,87 @@
                     </div>
                 </div>
                 
+                    <h2>PERFIL</h2>
+                    <br>
+
+                    <form action="../validadores/CerrarSesion.php" method="post">
+                        <?php
+                        session_start();
+                        if (isset($_SESSION["nombreCompleto"])) {
+                            $nombreCompleto = $_SESSION["nombreCompleto"];
+                            echo '<p style="color: white;">Nombre completo: <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="nombreCompleto" required class="password" value="' . $nombreCompleto . '" readonly></p>';
+                        } else {
+                            echo 'No se ha iniciado sesión.';
+                        }
+                        if (isset($_SESSION["username"])) {
+                            $nombreDeUsuario = $_SESSION["username"];
+                            echo '<p style="color: white;">Nombre usuario: <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required class="username" value="' . $nombreDeUsuario . '" readonly></p>';
+                        } else {
+                            echo 'No se ha iniciado sesión.';
+                        }
+                        if (isset($_SESSION["correoElectronico"])) {
+                            $correoElectronico = $_SESSION["correoElectronico"];
+                            echo '<p style="color: white;">Correo Electronico: <input type="text" id="correoElectronico" name="correoElectronico" placeholder="correoElectronico" required class="password" value="' . $correoElectronico . '" readonly></p>';
+                        } else {
+                            echo 'No se ha iniciado sesión.';
+                        }
+                        if (isset($_SESSION["password"])) {
+                            $password = $_SESSION["password"];
+                            echo '<p style="color: white;">Contraseña: <input type="text" id="password" name="password" placeholder="password" required class="password" value="' . $password . '" readonly></p>';
+                        } else {
+                            echo 'No se ha iniciado sesión.';
+                        }
+                        if (isset($_SESSION["foto"])) {
+                            $imagen = $_SESSION["foto"];
+                            
+                            echo '    <img src="../imagenesUsuario/' . $imagen . '" alt="Descripción de la imagen"  width="150" height="150" >';
+                        } else {
+                            echo 'No hay imagen';
+                        }
+                        if (isset($_SESSION["idioma"])) {
+                            $idioma = $_SESSION["idioma"];
+                            echo '<p style="color: white;">Idiomas seleccionados: <input type="text" id="idioma" name="idioma"  required class="password" value="' . $idioma . '" readonly></p>';
+                        } else {
+                            echo 'No seleccionó ningún idioma';
+                        }
+                        echo '<br>';
+                        echo '<button name="bCerrarSesion" style="background-color: white;">Cerrar sesión</button>'
+                        ?>
+                    </form>
+                </div>
+                <div class="servicio">
+                    <?php
+                    //Recoger datos del formulario del servicio
+                    $titulo = isset($_GET['titulo']) ? $_GET['titulo'] : '';
+                    $categoria = isset($_GET['categoria']) ? $_GET['categoria'] : '';
+                    $descripcion = isset($_GET['descripcion']) ? $_GET['descripcion'] : '';
+                    $precioH = isset($_GET['precio_por_hora']) ? $_GET['precio_por_hora'] : '';
+                    $ubicacion = isset($_GET['ubicacion']) ? $_GET['ubicacion'] : '';
+
+                    //recojo el valor de los checkboxes de disponibilidad
+                    $disponibilidad = isset($_GET['servicios']) ? $_GET['servicios'] : array();
+
+                    //Mostrando los datos del servicio
+                    if (!empty($titulo)) {
+                        echo '<p  style="color: white;"><strong>Título:</strong> ' . $titulo . '</p>';
+                    }
+                    if (!empty($categoria)) {
+                        echo '<p  style="color: white;"><strong>Categoría:</strong> ' . $categoria . '</p>';
+                    }
+                    if (!empty($descripcion)) {
+                        echo '<p  style="color: white;"><strong>Descripción:</strong> ' . $descripcion . '</p>';
+                    }
+                    if (!empty($precioH)) {
+                        echo '<p  style="color: white;"><strong>Precio por hora:</strong> ' . $precioH . '</p>';
+                    }
+                    if (!empty($ubicacion)) {
+                        echo '<p  style="color: white;"><strong>Ubicación:</strong> ' . $ubicacion . '</p>';
+                    }
+                    if (!empty($disponibilidad)) {
+                        echo '<p  style="color: white;"><strong>Disponibilidad:</strong> ' . implode(", ", $disponibilidad) . '</p>';
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>

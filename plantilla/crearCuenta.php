@@ -49,6 +49,7 @@
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
+                <div class "signup-stars"></div>
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
             </div>
