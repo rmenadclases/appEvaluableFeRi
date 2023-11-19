@@ -204,7 +204,30 @@ function cNum(string $num, string $campo, array &$errores, bool $requerido = TRU
     return false;
 }
 
-$primeraVez = true;
+//función para guardar el servicio en el servicios.txt
+function crearServicio(string $titulo, array $categoria, string $descripcion, string $tipo, ?string $precioPorHora, string $ubicacion, array $disponibilidad, ?string $foto): bool {
+    
+    $datosServicio = "\nTítulo: $titulo\nCategoría:" . implode(", ", $categoria) . "\nDescripción: $descripcion\nTipo: $tipo\nPrecio por hora: $precioPorHora\nUbicación: $ubicacion\nDisponibilidad: " . implode(", ", $disponibilidad) . "\n";
+
+    //indico la ruta del archivo
+    $rutaArchivo = "../almacenamientoFicheros/servicios.txt";
+
+    //y guardamos los datos en el archivo
+    if (is_file($rutaArchivo)) {
+        $fp = fopen($rutaArchivo, "r");
+        $escribir = fopen($rutaArchivo, "a");
+        fwrite($escribir, $datosServicio.PHP_EOL);
+        fclose($escribir);
+        fclose($fp);
+    }else{
+        //si el archivo no existe se crea
+        $fp = fopen($rutaArchivo, "w");
+        fwrite($fp, $datosServicio.PHP_EOL);
+        fclose($fp);
+    }
+        return true;
+    }
+
 function creayValidaConexion1(string $nombre, string $password, string $campo, array &$errores, string $nombreCompleto, string $correoElectronico,string $imagen,string $idioma)
 {
     session_start();

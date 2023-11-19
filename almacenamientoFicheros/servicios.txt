@@ -1,0 +1,95 @@
+Título: Primer servicio creado
+Categoría: categoria3
+Descripción: Creando servicios varios
+Tipo: intercambio
+Precio por hora: 12
+Ubicación: Mi casa
+Disponibilidad: Mañanas, Tardes, Noches
+
+Título: Crenado más serivicos
+Categoría: categoria1
+Descripción: fdsfasdf
+Tipo: intercambio
+Precio por hora: 12
+Ubicación: dasdadasd
+Disponibilidad: Mañanas, Tardes, Noches, Fines
+
+Título: Cuarto servicio creadp
+Categoría: categoria2
+Descripción: gdsfgsdfgsd
+Tipo: intercambio
+Precio por hora: 32
+Ubicación: Mi casa
+Disponibilidad: Mañanas, Tardes, Noches
+
+Título: fasdfasdfa
+Categoría: categoria3
+Descripción: fsadfasdf
+Tipo: intercambio
+Precio por hora: 12
+Ubicación: fasd
+Disponibilidad: Mañanas, Tardes, Noches, Fines
+
+
+Título: fasdfasdfa
+Categoría: categoria3
+Descripción: fsadfasdf
+Tipo: intercambio
+Precio por hora: 12
+Ubicación: fasd
+Disponibilidad: Mañanas, Tardes, Noches, Fines
+
+
+Título: prueba
+Categoría: categoria2
+Descripción: fadscas
+Tipo: intercambio
+Precio por hora: 12
+Ubicación: fasd
+Disponibilidad: Mañanas, Tardes
+
+
+Título: prueba
+Categoría: categoria2
+Descripción: fadscas
+Tipo: intercambio
+Precio por hora: 12
+Ubicación: fasd
+Disponibilidad: Mañanas, Tardes
+
+
+Título: Seguimos creando servicios
+Categoría: categoria1
+Descripción: fsdfsd
+Tipo: intercambio
+Precio por hora: 123
+Ubicación: fasdf
+Disponibilidad: Noches
+
+
+Título: Primer servicio
+Categoría:
+Descripción: gsdfgsdf
+Tipo: intercambio
+Precio por hora: 23
+Ubicación: hhdfg
+Disponibilidad: Mañanas
+
+
+Título: gdfgsdf
+Categoría:
+Descripción: jhfgmhfgmghj
+Tipo: intercambio
+Precio por hora: 453
+Ubicación: dasdadasd
+Disponibilidad: Noches
+
+
+Título: nbnfgnf
+Categoría:
+Descripción: nfghnfbg
+Tipo: intercambio
+Precio por hora: 34
+Ubicación: Mi casa
+Disponibilidad: Mañanas
+

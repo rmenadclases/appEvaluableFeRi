@@ -30,6 +30,7 @@ if (isset($_REQUEST['bRegistro'])) {
             }
             if (creayValidaConexion1($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file, $idiomaString)) {
                 $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión
+                header("location: ../plantilla/Login.html"); // Redirige al usuario
                 header("location: ../Login.html"); // Redirige al usuario
                 $primeraVez = false;
             } else {

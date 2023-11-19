@@ -34,6 +34,7 @@
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
+                <div class="signup-stars"></div>
                 <div class "signup-stars"></div>
                 <div class="signup-stars"></div>
                 <div class="signup-stars"></div>
@@ -52,11 +53,36 @@
                 </div>
                 <div class="contenedorIzquierdo">
                     <a href="../plantilla/modificarPerfil.php"> <button style="background-color: white;">Modificar Perfil</button></a>
+                    <a href="../plantilla/formServicios.php"><button style="background-color: white; name='cServicios'">Crear servicio</button></a>
                     <a href="./formServicios.php"><button style="background-color: white; name='cServicios'">Crear servicio</button></a>
                 </div>
             </div>
             <div class="form-container">
                 <div class="profile-form">
+                    <h2>SERVICIOS</h2>
+                    <div class="servicio">
+                    <?php
+                    //aquí mostramos los títulos de los servicios que se han creado en el archivo servicios.txt
+                    $rutaArchivo = "../almacenamientoFicheros/servicios.txt";
+
+                    if (is_file($rutaArchivo)) {
+                        $servicios = file($rutaArchivo, FILE_IGNORE_NEW_LINES);
+
+                        foreach ($servicios as $servicio) {
+                            //Dividimos la línea del servicio en partes usando el separador ":"
+                            $partes = explode(":", $servicio);
+                            //Comprobamos si hay partes y si la primera parte es el Título
+                            if (!empty($partes) && trim($partes[0]) == "Título") {
+                                echo '<p style="color: white;">' . trim($partes[1]) . '</p>';
+                            }
+                        }
+                    } else {
+                        echo '<p style="color:white;">No hay servicios disponibles. Debes crear uno</p>';
+                    }
+                    ?>
+                    </div>
+                </div>
+                
                     <h2>PERFIL</h2>
                     <br>
 
