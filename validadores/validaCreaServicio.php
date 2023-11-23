@@ -4,6 +4,10 @@ include('../libs/bGeneral.php');
 include('../config/config.php');
 
 $errores = [];
+/**
+Sólo pueden crear servicios los usuarios logueados
+
+**/
 
 // Compruebo si se ha pulsado el botón del formulario de crear cuenta
 if (isset($_REQUEST['bServicio'])) {
@@ -15,7 +19,14 @@ if (isset($_REQUEST['bServicio'])) {
     $precioPorHora = recoge("precio_por_hora");
     $ubicacion = recoge("ubicacion");
     $disponibilidad = recogeArray("servicios");
+    /*
+        La foto no se recoge así. No llega a $_REQUEST
+    */
     $foto = recoge("foto");
+
+    /*
+    Hay que validar los datos
+        */
 
     // Realiza las validaciones necesarias en el archivo de validación
     if (empty($titulo)) {
