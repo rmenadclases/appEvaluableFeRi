@@ -230,6 +230,10 @@ function crearServicio(string $titulo, string $categoria, string $descripcion, s
     }
 
 $primeraVez = true;
+/**
+Esta función hace demasiadas cosas
+
+**/
 function creayValidaConexion1(string $nombre, string $password, string $campo, array &$errores, string $nombreCompleto, string $correoElectronico,string $imagen,string $idioma)
 {
     session_start();
