@@ -15,6 +15,10 @@ if (isset($_REQUEST['bServicio'])) {
     $precioPorHora = recoge("precio_por_hora");
     $ubicacion = recoge("ubicacion");
     $disponibilidad = recogeArray("servicios");
+    /*
+        La foto no se recoge con recoge porque no llega a $_REQUEST
+        Las validaciones tienes que hacerlas con las funciones de validación, solo validas que no sea vacío
+    */
     $foto = recoge("foto");
 
     // Realiza las validaciones necesarias en el archivo de validación
