@@ -23,6 +23,9 @@ if (isset($_REQUEST['bRegistro'])) {
             $idiomaString = implode(" ", $idioma); //Convierto el array en STRING para poder crear la conexion
         } else {
             $idiomaString = implode(" ", $idioma); //Convierto el array en STRING para poder crear la conexion
+            /*
+                Sube imagen sólo si el resto de datos son correctos
+                */
 
             $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);
             if ($file == true) {
