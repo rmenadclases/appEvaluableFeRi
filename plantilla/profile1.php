@@ -61,6 +61,9 @@
                     <h2>SERVICIOS DISPONIBLES ACTUALMENTE</h2>
                     <div class="servicio">
                     <?php
+/**
+Intentar no poner en las plantillas tanto código
+**/
                     //aquí mostramos los títulos de los servicios que se han creado en el archivo servicios.txt
                     $rutaArchivo = "../almacenamientoFicheros/servicios.txt";
 
