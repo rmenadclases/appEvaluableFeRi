@@ -83,7 +83,7 @@
                 </div>
                 
                     <div class="button-container">
-                    <a href="./plantilla/Login.html"><button>Log in</button></a>
+                    <a href="./plantilla/Login.php"><button>Log in</button></a>
                     <a href="./plantilla/crearCuenta.php" ><button>Sing Up</button></a>
                 </div>
                 

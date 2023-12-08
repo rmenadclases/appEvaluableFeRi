@@ -25,15 +25,14 @@ if (isset($_REQUEST['bRegistro'])) {
             $idiomaString = implode(" ", $idioma); //Convierto el array en STRING para poder crear la conexion
             /*
                 Sube imagen sólo si el resto de datos son correctos
+                Solucionado, si no se seleccioan imagen , devuelve la imagen por defecto, 
+                si se ha seleccioando la imagen, devuelve la ruta de la imagen subida
                 */
 
-            $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);
-            if ($file == true) {
-                $file = "../imagenesUsuario/dump.jpg";
-            }
+            $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);            
             if (creayValidaConexion1($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file, $idiomaString)) {
                 $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión
-                header("location: ../plantilla/Login.html"); // Redirige al usuario
+                header("location: ../plantilla/Login.php"); // Redirige al usuario
                 $primeraVez = false;
             } else {
                 //include('../crearCuenta.php');

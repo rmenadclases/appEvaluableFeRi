@@ -60,6 +60,29 @@
                 <a href="../index1.php"><img src="../images/LogoTechSinFondoBlanco.png" alt="Logo"
                         class="centered-logo"></a>
             </div>
+            <?php
+ session_start();
+ $inactividad = 30;
+ $ip = $_SERVER['REMOTE_ADDR'];
+ if($ip===$_SESSION['ip']){
+// Calcular el tiempo de vida de la sesión
+$vidaSesion = time() - $_SESSION["timeout"];
+if($vidaSesion > $inactividad){
+//echo "Sesion destruida</br>";
+session_unset();
+session_destroy();
+session_start();
+$_SESSION['sesionCaducada'] = 'Su sessión ha caducado';
+header("Location: ../plantilla/login.php");
+}
+ }else{
+    session_unset();
+session_destroy();
+session_start();
+    $_SESSION['sesionCaducada'] = 'Su ip no coincide';
+header("Location: ../plantilla/login.php");
+ }
+            ?>
             <h2>Formulario Alta Servicio</h2>
             <div class="scroll-container">
             <form action="../validadores/validaCreaServicio.php" method="post">
@@ -125,6 +148,13 @@
                 <input type="file" id="foto" name="foto">
 
                <a href="../plantilla/profile1.php"> <input type="submit" name="bServicio" value="Crear servicio"></a>
+               <?php 
+                    if (!isset($_COOKIE['cookiesAceptadas'])) {
+                        echo '<input name="btnAceptarCookies" >';
+                    }else{
+                        setcookie('cookiesAceptadas',"cookiesAceptadas");
+                    }
+                    ?>
             </form>
             </div>
         </div>
