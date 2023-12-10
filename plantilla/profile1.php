@@ -61,6 +61,25 @@
                     <h2>SERVICIOS DISPONIBLES ACTUALMENTE</h2>
                     <div class="servicio">
                     <?php
+                    //sESSIOSession por inaxtividad
+                    session_start();
+                    $inactividad = 10;
+// Comprobar si $_SESSION["timeout"] está establecida
+if(isset($_SESSION["timeout"])){
+    // Calcular el tiempo de vida de la sesión
+$vidaSesion = time() - $_SESSION["timeout"];
+if($vidaSesion > $inactividad){
+//echo "Sesion destruida</br>";
+session_unset();
+session_destroy();
+header("Location: ../index1.php");
+
+}else 
+{
+    $_SESSION["timeout"]=time();
+}
+}
+// Vuelvo a iniciar la sesion
 /**
 Intentar no poner en las plantillas tanto código
 **/
@@ -81,7 +100,9 @@ Intentar no poner en las plantillas tanto código
                     } else {
                         echo '<p style="color:white;">No hay servicios disponibles. Debes crear uno</p>';
                     }
+
                     ?>
+
                    
                     </div>
                     <a href="../validadores/cerrarSesion.php"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>

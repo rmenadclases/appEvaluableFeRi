@@ -1,6 +1,6 @@
 <?php
 //Tratamiento de imagenes
-$dir = "./imagenesUsuario"; //Sustituye pro el directorio actual
+$dir = "../imagenesUsuario"; //Sustituye pro el directorio actual
 /**
  * Tamaño máximo aceptado, si queremos que sea inferior al configurado en php.ini
  **/

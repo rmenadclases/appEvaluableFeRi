@@ -232,6 +232,7 @@ function crearServicio(string $titulo, string $categoria, string $descripcion, s
 $primeraVez = true;
 /**
 Esta función hace demasiadas cosas
+debo eliminar el verifica si la variable de sesion existe, ahora comprobamaremos del fichero/bbdd
 
 **/
 function creayValidaConexion1(string $nombre, string $password, string $campo, array &$errores, string $nombreCompleto, string $correoElectronico,string $imagen,string $idioma)
@@ -332,6 +333,8 @@ function creayValidaConexion(string $correoElectronico, string $password, string
             $_SESSION["correoElectronico"] = $datos[3];
             $_SESSION["foto"] = $datos[4];
             $_SESSION["idioma"] = $datos[5];
+             //Ponemos a time() el contador de inactividad
+            $_SESSION["timeout"]=time();
             return true; // Las credenciales coinciden
         }
         }
@@ -516,7 +519,7 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
    // $_FILES["archivo"];
     // Caso especial que el campo de file no es requerido y no se intenta subir ningun archivo
     if ((!$required) && $_FILES[$nombre]['error'] === 4)
-        return true;
+        return  "../imagenesUsuario/dump.jpg";
     // En cualquier otro caso se comprueban los errores del servidor 
     if ($_FILES[$nombre]['error'] != 0) {
         $errores["$nombre"] = "Error al subir el archivo " . $nombre . ". Prueba de nuevo";

