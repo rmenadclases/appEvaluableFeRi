@@ -205,9 +205,9 @@ function cNum(string $num, string $campo, array &$errores, bool $requerido = TRU
 }
 
 //función para guardar el servicio en el servicios.txt
-function crearServicio(string $titulo, string $categoria, string $descripcion, string $tipo, ?string $precioPorHora, string $ubicacion, array $disponibilidad, ?string $foto): bool {
+function crearServicio(string $titulo, string $categoria, string $descripcion, string $tipo, ?string $precioPorHora, string $ubicacion, array $disponibilidad, ?string $rutaFoto): bool {
     
-    $datosServicio = "\nTítulo: $titulo\nCategoría: $categoria\nDescripción: $descripcion\nTipo: $tipo\nPrecio por hora: $precioPorHora\nUbicación: $ubicacion\nDisponibilidad: " . implode(", ", $disponibilidad) . "\n";
+    $datosServicio = "\nTítulo: $titulo\nCategoría: $categoria\nDescripción: $descripcion\nTipo: $tipo\nPrecio por hora: $precioPorHora\nUbicación: $ubicacion\nDisponibilidad: " . implode(", ", $disponibilidad) . "\nFoto: $rutaFoto\n";
 
     //indico la ruta del archivo
     $rutaArchivo = "../almacenamientoFicheros/servicios.txt";

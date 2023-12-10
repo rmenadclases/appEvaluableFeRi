@@ -150,12 +150,14 @@
                 echo '<button name="bGuardar" style="background-color: white;"">Guardar</button>'
                     ?>
                      <?php 
-                   if (!isset($_COOKIE['cookiesAceptadas'])) {                    
-                    echo '<label id="labelCookies" for="btnAceptar" class="color">Haz clic para aceptar las cookies:</label>';
-                    echo '<form method="post" action="">';
-                    echo '<input id="btnAceptar" name="btnAceptar" type="button" value="Aceptar" onclick="ocultarBoton();">';                    
-                } else {
-                    setcookie('cookiesAceptadas', 'cookiesAceptadas');
+                   if (!isset($_COOKIE['cookieAceptada'])) {                  
+                    echo '<div class="centrar">';
+                    echo '<form method="post" action="../validadores/validarCookie.php">'; // Agrega un formulario
+                    echo '<label id="labelCookies" for="btnAceptarCookies" class="color">Haz clic para aceptar las cookies:</label>';
+                    echo '<input id="btnAceptarCookies" name="btnAceptarCookies" type="submit" value="Aceptar">';
+                    echo '</form>';
+                    echo '</div>';
+                
                 }
                     ?>
             </form>
