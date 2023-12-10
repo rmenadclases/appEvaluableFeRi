@@ -15,13 +15,11 @@ if (isset($_REQUEST['bServicio'])) {
     $precioPorHora = recoge("precio_por_hora");
     $ubicacion = recoge("ubicacion");
     $disponibilidad = recogeArray("servicios");
-    $imagen = recoge("imagen");
-
-    //Manejo la carga de la foto
-   /* $foto = $_FILES["foto"]["name"]; //aqui se obtiene el nombre de la foto
-    $ruta_temporal = $_FILES["foto"]["tmp_name"]; //aqui se obtiene la ruta temporal
-    $ruta_final = "../imagenesServicios" . basename($foto);*/
-    
+    /*
+        La foto no se recoge con recoge porque no llega a $_REQUEST
+        Las validaciones tienes que hacerlas con las funciones de validación, solo validas que no sea vacío
+    */
+    $foto = recoge("foto");
 
     // Realiza las validaciones necesarias en el archivo de validación
     if (empty($titulo)) {
@@ -51,14 +49,7 @@ if (isset($_REQUEST['bServicio'])) {
     if (empty($errores)) {
         // Realiza las acciones que deseas cuando todas las validaciones son correctas
         // Llama a la función para procesar y guardar el formulario
-        if ($_FILES['imagen']['error'] != 0) {
-            $errores["imagen"] = "Error en la imagen";
-        }
-        $file = cfile($imagen, $errores, $extensionesValidas, $dir, $max_file_size);
-        if ($file == false) {
-            $file = "../imagenesUsuario/dump.jpg";
-        }
-        if (crearServicio($titulo, $categoria, $descripcion, $tipo, $precioPorHora, $ubicacion, $disponibilidad, $file)) {
+        if (crearServicio($titulo, $categoria, $descripcion, $tipo, $precioPorHora, $ubicacion, $disponibilidad, $foto)) {
             header('location:../plantilla/profile1.php');
         } else {
             include('location:../plantilla/formServicios.php');
