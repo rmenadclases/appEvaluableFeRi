@@ -149,11 +149,15 @@ header("Location: ../plantilla/login.php");
 
                <a href="../plantilla/profile1.php"> <input type="submit" name="bServicio" value="Crear servicio"></a>
                <?php 
-                    if (!isset($_COOKIE['cookiesAceptadas'])) {
-                        echo '<input name="btnAceptarCookies" >';
-                    }else{
-                        setcookie('cookiesAceptadas',"cookiesAceptadas");
-                    }
+                   if (!isset($_COOKIE['cookieAceptada'])) {                   
+                    echo '<div class="centrar">';
+                    echo '<form method="post" action="../validadores/validarCookie.php">'; // Agrega un formulario
+                    echo '<label id="labelCookies" for="btnAceptarCookies" class="color">Haz clic para aceptar las cookies:</label>';
+                    echo '<input id="btnAceptarCookies" name="btnAceptarCookies" type="submit" value="Aceptar">';
+                    echo '</form>';
+                    echo '</div>';
+                
+                }
                     ?>
             </form>
             </div>
