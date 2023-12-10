@@ -1,3 +1,10 @@
+<?php
+if(!isset($_SESSION)){
+    session_start();
+    // Resto de tu código...
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en" class="height-full" data-a11y-animated-images="system" data-a11y-link-underlines="true"
     data-turbo-loaded="">
@@ -63,7 +70,6 @@
             <h2>Login</h2>
             <br>
             <form action="../validadores/validaLogin.php" method="post">
-
                 <?php if (isset($errores['username/password'])): ?>
                 <p class="errores"><?= $errores['username/password'] ?></p><br>
                 <?php endif; ?>
@@ -74,6 +80,11 @@
                 <br>
                 <br>
                 <button type="submit" name="bAceptar" value="aceptar">Entrar</button>
+                <?php
+                if (isset($_SESSION['sesionCaducada'])): ?>
+                <p class="errores"><?=$_SESSION['sesionCaducada']?></p><br>
+                <?php endif; ?>
+                
             </form>
         </div>
     </div>

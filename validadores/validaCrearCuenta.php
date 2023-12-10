@@ -32,7 +32,7 @@ if (isset($_REQUEST['bRegistro'])) {
             $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);            
             if (creayValidaConexion1($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file, $idiomaString)) {
                 $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión
-                header("location: ../plantilla/Login.html"); // Redirige al usuario
+                header("location: ../plantilla/Login.php"); // Redirige al usuario
                 $primeraVez = false;
             } else {
                 //include('../crearCuenta.php');

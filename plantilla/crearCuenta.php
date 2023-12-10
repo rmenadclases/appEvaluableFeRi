@@ -117,7 +117,7 @@
                 <br>
                 <textarea id="descripcion" name="descripcion" rows="4" cols="50" placeholder="Escribe aquí..."></textarea>
                 <br>
-                <a href="Login.html">Ya tienes cuenta?Iniciar Sesion</a>
+                <a href="Login.php">Ya tienes cuenta?Iniciar Sesion</a>
                 <br>
                 <br>
                 <button type="submit" name="bRegistro" value="aceptar">Crear cuenta</button>

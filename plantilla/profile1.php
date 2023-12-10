@@ -51,9 +51,12 @@
                     <a href="../index1.php"><img src="../images/LogoTechSinFondoBlanco.png" alt="Logo" class="centered-logo"></a>
                 </div>
                 <div class="contenedorIzquierdo">
+                    <!--<form  action="../validadores/comprobarPerfil.php" method="post" enctype="multipart/form-data">-->
+                    <input type="submit" name="btnModificarPerfil" value="ModifiPerfil">
+                    <input type="submit" name="btnModificarPerfil" value="CreaServicios">
                     <a href="../plantilla/modificarPerfil.php"> <button style="background-color: white;">Modificar Perfil</button></a>
                     <a href="../plantilla/formServicios.php"><button style="background-color: white; name='cServicios'">Crear servicio</button></a>
-                    
+                   <!--  </form>-->
                 </div>
             </div>
             <div class="form-container">
@@ -63,23 +66,38 @@
                     <?php
                     //sESSIOSession por inaxtividad
                     session_start();
+<<<<<<< HEAD
                     $inactividad = 10;
+=======
+                    $inactividad = 600;
+>>>>>>> b137b3dab9ad8b8d06c35cab6339928de2af1fb6
 // Comprobar si $_SESSION["timeout"] está establecida
 if(isset($_SESSION["timeout"])){
     // Calcular el tiempo de vida de la sesión
 $vidaSesion = time() - $_SESSION["timeout"];
 if($vidaSesion > $inactividad){
+<<<<<<< HEAD
 //echo "Sesion destruida</br>";
 session_unset();
 session_destroy();
 header("Location: ../index1.php");
+=======
+    session_unset();
+    session_destroy();
+    session_start();
+    $_SESSION['sesionCaducada'] = 'Su sessión ha caducado';
+header("Location: ../plantilla/login.php");
+>>>>>>> b137b3dab9ad8b8d06c35cab6339928de2af1fb6
 
 }else 
 {
     $_SESSION["timeout"]=time();
 }
 }
+<<<<<<< HEAD
 // Vuelvo a iniciar la sesion
+=======
+>>>>>>> b137b3dab9ad8b8d06c35cab6339928de2af1fb6
 /**
 Intentar no poner en las plantillas tanto código
 **/
@@ -105,17 +123,50 @@ Intentar no poner en las plantillas tanto código
 
                    
                     </div>
-                    <a href="../validadores/cerrarSesion.php"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>
+                    <br>
+                    <a href="../validadores/cerrarSesion.php" class="centrarUno"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>
+                    <br>
+                    <?php 
+                     if (!isset($_REQUEST['btnAceptarCookies'])) {
+                        echo '<div class="centrar">';
+                    echo '<label id="labelCookies" for="btnAceptarCookies" class="color">Haz clic para aceptar las cookies:</label>';
+                    echo '<input id="btnAceptarCookies" name="btnAceptarCookies" type="button" value="Aceptar" onclick="ocultarBoton();">';
+                    echo '</div>';
+                     }else{
+                       
+                    setcookie('cookiesAceptadas', 'cookiesAceptadas', time() + 3600, '/');
+                     }
+                    ?>
                 </div>
                 
             </div>
         </div>
     </div>
 </body>
+<script>
+    function ocultarBoton() {
+        document.getElementById('btnAceptar').style.display = 'none';
+        document.getElementById('btnAceptarCookies').style.display='none';                
+    }
+</script>
 
 <style>
+    .centrarUno{
+        display: flex;
+        justify-content: center;
+
+    }
+    .centrar{
+        margin-left: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .color{
+        color:white;
+    }
     .btnCerrar{
-        margin-left: 250px;
+        margin-left: 50px;
     }
     .contenedorIzquierdo {
         display: flex;

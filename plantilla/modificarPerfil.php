@@ -63,6 +63,30 @@
             <form action="../validadores/guardarDatosPerfil.php" method="post"  enctype="multipart/form-data">
                 <?php
                 session_start();
+                $inactividad = 30;
+                $ip = $_SERVER['REMOTE_ADDR'];
+                if($ip===$_SESSION['ip']){
+               // Calcular el tiempo de vida de la sesión
+               $vidaSesion = time() - $_SESSION["timeout"];
+               if($vidaSesion > $inactividad){
+               //echo "Sesion destruida</br>";
+               session_unset();
+               session_destroy();
+               session_start();
+               $_SESSION['sesionCaducada'] = 'Su sessión ha caducado';
+               header("Location: ../plantilla/login.php");
+               }
+                }else{
+                    session_unset();
+               session_destroy();
+               session_start();
+               header("Location: ../plantilla/login.php");
+                }
+                           
+
+ 
+
+
                 if (isset($_SESSION["nombreCompleto"])) {
                     $nombreCompleto = $_SESSION["nombreCompleto"];
                     echo '<p style="color: white;">Nombre completo: <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="nombreCompleto" required class="password" value="' . $nombreCompleto . '" readonly></p>';
@@ -96,6 +120,7 @@
                     echo '    <img src="' . $imagen . '" alt="Descripción de la imagen"  width="150" height="150" >';
                 }
                 echo '<br>';
+            
                 ?>
                 <br>
                 <label for="foto" style="color: white;">Cambair la foto de perfil:</label>
@@ -111,6 +136,7 @@
                     echo 'No seleccionó ningún idioma';
                 }
                 echo '<br>';
+            
                 ?>
                 <p class="color">
                 <?php require_once '../libs/componentes.php'; ?>                  
@@ -123,11 +149,26 @@
                 echo '<br>';
                 echo '<button name="bGuardar" style="background-color: white;"">Guardar</button>'
                     ?>
+                     <?php 
+                   if (!isset($_COOKIE['cookiesAceptadas'])) {                    
+                    echo '<label id="labelCookies" for="btnAceptar" class="color">Haz clic para aceptar las cookies:</label>';
+                    echo '<form method="post" action="">';
+                    echo '<input id="btnAceptar" name="btnAceptar" type="button" value="Aceptar" onclick="ocultarBoton();">';                    
+                } else {
+                    setcookie('cookiesAceptadas', 'cookiesAceptadas');
+                }
+                    ?>
             </form>
         </div>
     </div>
 </body>
-
+<script>
+    function ocultarBoton() {
+        document.getElementById('btnAceptar').style.display = 'none';
+        document.getElementById('labelCookies').style.display='none';
+        
+    }
+</script>
 <style>
     .color {
         color: white;

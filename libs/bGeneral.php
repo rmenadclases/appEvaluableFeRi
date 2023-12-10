@@ -335,6 +335,12 @@ function creayValidaConexion(string $correoElectronico, string $password, string
             $_SESSION["idioma"] = $datos[5];
              //Ponemos a time() el contador de inactividad
             $_SESSION["timeout"]=time();
+<<<<<<< HEAD
+=======
+            // Obtiene la dirección IP real del cliente detrás de un proxy
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['ip']=$ip;
+>>>>>>> b137b3dab9ad8b8d06c35cab6339928de2af1fb6
             return true; // Las credenciales coinciden
         }
         }
