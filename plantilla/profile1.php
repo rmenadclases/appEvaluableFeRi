@@ -51,12 +51,8 @@
                     <a href="../index1.php"><img src="../images/LogoTechSinFondoBlanco.png" alt="Logo" class="centered-logo"></a>
                 </div>
                 <div class="contenedorIzquierdo">
-                    <!--<form  action="../validadores/comprobarPerfil.php" method="post" enctype="multipart/form-data">-->
-                    <input type="submit" name="btnModificarPerfil" value="ModifiPerfil">
-                    <input type="submit" name="btnModificarPerfil" value="CreaServicios">
                     <a href="../plantilla/modificarPerfil.php"> <button style="background-color: white;">Modificar Perfil</button></a>
                     <a href="../plantilla/formServicios.php"><button style="background-color: white; name='cServicios'">Crear servicio</button></a>
-                   <!--  </form>-->
                 </div>
             </div>
             <div class="form-container">
@@ -112,15 +108,15 @@ Intentar no poner en las plantillas tanto código
                     <a href="../validadores/cerrarSesion.php" class="centrarUno"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>
                     <br>
                     <?php 
-                     if (!isset($_REQUEST['btnAceptarCookies'])) {
+                    if (!isset($_COOKIE['cookieAceptada'])) {
                         echo '<div class="centrar">';
-                    echo '<label id="labelCookies" for="btnAceptarCookies" class="color">Haz clic para aceptar las cookies:</label>';
-                    echo '<input id="btnAceptarCookies" name="btnAceptarCookies" type="button" value="Aceptar" onclick="ocultarBoton();">';
-                    echo '</div>';
-                     }else{
-                       
-                    setcookie('cookiesAceptadas', 'cookiesAceptadas', time() + 3600, '/');
-                     }
+                        echo '<form method="post" action="../validadores/validarCookie.php">';
+                        echo '<label id="labelCookies" for="btnAceptarCookies" class="color">Haz clic para aceptar las cookies:</label>';
+                        echo '<input id="btnAceptarCookies" name="btnAceptarCookies" type="submit" value="Aceptar">';
+                        echo '</form>';
+                        echo '</div>';
+                    
+                    }
                     ?>
                 </div>
                 
