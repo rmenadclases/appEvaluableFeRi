@@ -59,11 +59,12 @@
             </div>
 
             <h2>PERFIL</h2>
+            <div class="scroll-container">
             <br>
-            <form action="../validadores/guardarDatosPerfil.php" method="post"  enctype="multipart/form-data">
+            <form action="../validadores/guardarDatosPerfil.php" method="post" enctype="multipart/form-data">
                 <?php
                 session_start();
-                $inactividad = 30;
+                $inactividad = 1800;
                 $ip = $_SERVER['REMOTE_ADDR'];
                 if($ip===$_SESSION['ip']){
                // Calcular el tiempo de vida de la sesión
@@ -94,13 +95,6 @@
                     echo 'No se ha iniciado sesión.';
                 }
                 echo '<br>';
-                if (isset($_SESSION["username"])) {
-                    $nombreDeUsuario = $_SESSION["username"];
-                    echo '<p style="color: white;">Nombre usuario: <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required class="username" value="' . $nombreDeUsuario . '" readonly></p>';
-                } else {
-                    echo 'No se ha iniciado sesión.';
-                }
-                echo '<br>';
                 if (isset($_SESSION["correoElectronico"])) {
                     $correoElectronico = $_SESSION["correoElectronico"];
                     echo '<p style="color: white;">Correo Electronico: <input type="text" id="correoElectronico" name="correoElectronico" placeholder="correoElectronico" required class="password" value="' . $correoElectronico . '" readonly></p>';
@@ -115,17 +109,31 @@
                     echo 'No se ha iniciado sesión.';
                 }
                 echo '<br>';
+                if (isset($_SESSION["descripcion"])) {
+                    $descripcion = $_SESSION["descripcion"];
+                    echo '<p style="color: white;">Descripción: <input type="text" id="descripcion" name="descripcion" placeholder="descripcion" required class="password" value="' . $descripcion . '" ></p>';
+                    
+                } else {
+                    echo 'No se ha iniciado sesión.';
+                }
+                echo '<br>';
+                //24/12                
                 if (isset($_SESSION["foto"])) {
                     $imagen = $_SESSION["foto"];
                     echo '    <img src="' . $imagen . '" alt="Descripción de la imagen"  width="150" height="150" >';
                 }
+                
                 echo '<br>';
-            
+                
+                // Remove the semicolon and line break here
                 ?>
-                <br>
-                <label for="foto" style="color: white;">Cambair la foto de perfil:</label>
-                <br>
-                <input type="file" name="imagen" id="imagen" id="imagen" style="color: white;">
+            
+                
+                <br>;
+                <label for="foto" style="color: white;">Cambair la foto de perfil:</label>';
+                 <br>;
+                <input type="file" name="imagen" id="imagen" style="color: white;">';
+                
                 <br>
                 <?php
                 echo '<br>';
@@ -144,12 +152,16 @@
                              pintaCheck($idiomas, "idioma") ;                                                                                   
                          ?>
                 </p>
+               
                 <?php
 
                 echo '<br>';
                 echo '<button name="bGuardar" style="background-color: white;"">Guardar</button>'
                     ?>
-                     <?php 
+                  <br>
+                    
+            </form>
+            <?php 
                    if (!isset($_COOKIE['cookieAceptada'])) {                  
                     echo '<div class="centrar">';
                     echo '<form method="post" action="../validadores/validarCookie.php">'; // Agrega un formulario
@@ -157,12 +169,25 @@
                     echo '<input id="btnAceptarCookies" name="btnAceptarCookies" type="submit" value="Aceptar">';
                     echo '</form>';
                     echo '</div>';
-                
                 }
                     ?>
+                    <br> 
+                    <form method="post" action="../validadores/validarColor.php">
+                <?php
+               require_once '../libs/componentes.php';
+               require_once '../recogeryValidar.php';
+                echo '<div class="centrar">';
+                echo pintaRadio($colores, "colores") . '</div>';
+                ?>
+                <br> 
+                 
+                <input type="submit" value="Cambiar Color">                
             </form>
         </div>
+            </div>
+        
     </div>
+    
 </body>
 <script>
     function ocultarBoton() {
@@ -172,6 +197,20 @@
     }
 </script>
 <style>
+    
+    .scroll-container {
+        max-height: 400px;
+        overflow-y: scroll;
+        padding-right: 20px;
+    }
+    .centrar{
+        margin-left: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:black;
+        
+    }
     .color {
         color: white;
     }

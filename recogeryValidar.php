@@ -9,16 +9,15 @@ $primeraVez = true;
 $errores = [];
 $idioma = [];
 
-$userPrueba = "rmenad";
-$passWordPrueba = "rmenad";
 //Variables para recoger mas datos
 $nombreCompleto = "";
 $correoElectronico = "";
 $fechaNacimiento = "";
 $idiomas = array("español", "ingles", "chino");
+$colores = array("blanco", "normal", "negro");
 
 //Tratamiento de imagenes
-$dir = "./imagenesUsuario"; //Sustituye pro el directorio actual
+$dir = "../imagenesUsuario"; //Sustituye pro el directorio actual
 /**
  * Tamaño máximo aceptado, si queremos que sea inferior al configurado en php.ini
  **/

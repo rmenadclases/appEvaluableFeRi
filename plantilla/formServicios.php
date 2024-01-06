@@ -148,6 +148,7 @@ header("Location: ../plantilla/login.php");
                 <input type="file" id="foto" name="foto">
 
                <a href="../plantilla/profile1.php"> <input type="submit" name="bServicio" value="Crear servicio"></a>
+               
                <?php 
                    if (!isset($_COOKIE['cookieAceptada'])) {                   
                     echo '<div class="centrar">';

@@ -13,9 +13,10 @@ function pintaCheck(array $valores, string $name){
 
 function pintaRadio(array $valores, string $name){
     foreach($valores as $key=>$valor){
-        echo '<input type="radio" name="'.$name.'" value="'.$valor.'">'. $valor.'<br>';
+        $checked = ($valor === "normal") ? 'checked' : '';
 
-    };
+        echo '<input type="radio" name="' . $name . '" value="' . $valor . '" ' . $checked . '><span style="color: white;">' . $valor . '</span><br>';
+    }
 };
 
 

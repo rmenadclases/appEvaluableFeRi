@@ -5,6 +5,9 @@ if (isset($_REQUEST['bGuardar'])) {
     $correo=recoge("correoElectronico");
     $password = recoge("password");
     $imagen = recoge("imagen");
+    if (isset($_FILES['imagen'])) {
+        $imagen = $_FILES['imagen']['name'];
+    }
     $idioma=recogeArray("idioma");
     $descripcionPersonal=recoge("descripcion");
     if(!cCheck($idioma,"idiomas",$errores,$idioma,false)){
@@ -19,7 +22,7 @@ if (isset($_REQUEST['bGuardar'])) {
         if ($file == false) {
             $file = "../imagenesUsuario/dump.jpg";
         }
-        if (creayValidaConexion2($correo,$password, "username/password", $errores,$idiomaString,$file)) {
+        if (creayValidaConexion2($correo,$password, "username/password", $errores,$idiomaString,$file,$descripcionPersonal)) {
            // $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión
             header("Location: ../plantilla/profile1.php");          
             $primeraVez = false;

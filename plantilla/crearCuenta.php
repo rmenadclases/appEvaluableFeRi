@@ -3,6 +3,7 @@
     data-turbo-loaded="">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta</title>
     
                
                
@@ -117,10 +118,18 @@
                 <br>
                 <textarea id="descripcion" name="descripcion" rows="4" cols="50" placeholder="Escribe aquí..."></textarea>
                 <br>
-                <a href="Login.php">Ya tienes cuenta?Iniciar Sesion</a>
+                <a href="../plantilla/Login.php">Ya tienes cuenta?Iniciar Sesion</a>
                 <br>
                 <br>
                 <button type="submit" name="bRegistro" value="aceptar">Crear cuenta</button>
+                <?php if (isset($errores['errorBD'])): ?>
+                <p class="errores"><?= $errores['errorBD'] ?></p><br>
+                <?php endif; ?>
+                <br>
+                <?php if (isset($errores['mensajeCorreo'])): ?>
+                <p class="mensajeCorreo"><?= $errores['mensajeCorreo'] ?></p><br>
+                <?php endif; ?>
+                <br>
                 
                 
             </form>
@@ -139,7 +148,7 @@
 }
 form{
     display: block;
-  height: 200px;
+  height: 500px;
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
