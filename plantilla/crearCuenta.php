@@ -3,10 +3,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crear Cuenta</title>
-
-
-
-
+    
+               
+               
+               
 <head>
     <style type="text/css">
         .turbo-progress-bar {
@@ -122,14 +122,14 @@
                     <p class="mensajeCorreo"><?= $errores['mensajeCorreo'] ?></p><br>
                 <?php endif; ?>
                 <br>
-
-
+                
             </form>
         </div>
     </div>
 </body>
 
 <style>
+    
     body {
         overflow-x: auto;
         /* Permite el desplazamiento horizontal */
