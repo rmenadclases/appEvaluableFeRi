@@ -1,12 +1,14 @@
 ﻿<?php
+
 /****
  * Librería con funciones generales y de validación
  * 
  */
 
-//function cabecera($titulo = "") // el archivo actual
+
+function cabecera($titulo = "") // el archivo actual
 {
-    ?>
+?>
     <!DOCTYPE html>
     <html lang="es">
 
@@ -18,7 +20,7 @@
     </head>
 
     <body>
-        <?php
+    <?php
 }
 
 //function pie()
@@ -141,7 +143,6 @@ function recogeArray(string $var): array
     if (isset($_REQUEST[$var]) && (is_array($_REQUEST[$var]))) {
         foreach ($_REQUEST[$var] as $valor)
             $array[] = strip_tags(sinEspacios($valor));
-
     }
 
     return $array;
@@ -204,218 +205,230 @@ function cNum(string $num, string $campo, array &$errores, bool $requerido = TRU
     return false;
 }
 
-//función para guardar el servicio en el servicios.txt
-function crearServicio(string $titulo, string $categoria, string $descripcion, string $tipo, ?string $precioPorHora, string $ubicacion, array $disponibilidad, ?string $rutaFoto): bool {
+//función para guardar el servicio en la bbdd
+function crearServicio(string $titulo, string $categoria, string $descripcion, string $tipo, ?string $precioPorHora, string $ubicacion, array $disponibilidad, ?string $rutaFoto,string $correoElectronico): bool
+{
+    include('../config/config.php');
+    //Verificamos si el ID del usuario está en la sesión
+    $sql = "SELECT id_user FROM usuario WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $correoElectronico);
     
-    $datosServicio = "\nTítulo: $titulo\nCategoría: $categoria\nDescripción: $descripcion\nTipo: $tipo\nPrecio por hora: $precioPorHora\nUbicación: $ubicacion\nDisponibilidad: " . implode(", ", $disponibilidad) . "\nFoto: $rutaFoto\n";
+    
+    //Ejecutamos la consulta
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    //indico la ruta del archivo
-    $rutaArchivo = "../almacenamientoFicheros/servicios.txt";
-
-    //y guardamos los datos en el archivo
-    if (is_file($rutaArchivo)) {
-        $fp = fopen($rutaArchivo, "r");
-        $escribir = fopen($rutaArchivo, "a");
-        $fecha_actual = date("Y-m-d H:i:s");
-        fwrite($escribir, $datosServicio.$fecha_actual.PHP_EOL);
-        fclose($escribir);
-        fclose($fp);
-    }else{
-        //si el archivo no existe se crea
-        $fp = fopen($rutaArchivo, "w");
-        fwrite($fp, $datosServicio.PHP_EOL);
-        fclose($fp);
+    if (!isset($result)) {
+        echo "Usuario no identificado. No se puede crear el servicio.";
+        return false;
     }
+
+    //$idUsuario = $_SESSION['id_user'];
+
+    try {
+        //Iniciamos la transacción, las transacciones son útiles cuando quieres ejecutar múltiples operaciones en una base de datos de forma atómica;
+        //es decir, o tadas las operaciones tiene éxito, o si alguna falla, se pueden revertir todas ellas para mantener la integridad de la base de datos.
+        //$pdo->beginTransaction();
+
+        //Preparamos la consulta SQL
+        $sql = "INSERT INTO servicios (titulo, id_user, descripcion, precio, tipo, foto_servicio) 
+        VALUES (:titulo, :id_user, :descripcion, :precio, :tipo, :foto)";
+        $stmt = $pdo->prepare($sql);
+
+        //Vinculación de parámetros
+        $stmt->bindParam(':titulo', $titulo);
+        $id_user = $result[0]["id_user"];
+        $stmt->bindParam(':id_user', $id_user);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':precio', $precioPorHora);
+        $stmt->bindParam(':tipo', $tipo);
+        $stmt->bindParam(':foto', $rutaFoto);
+
+        //Ejecutamos la consulta
+        $stmt->execute();
+
+        //FInalizamos la transacción
+        //$pdo->commit();
         return true;
+    } catch (PDOException $e) {
+        //Manejamos el error
+        echo "Error al crear el servicio: " . $e->getMessage();
+        //error_log('PDOException - ' . $e->getMessage(), 0);
+        //Por lo que he visto en un entorno de producción, lo mejor sería no mostrar los detalles de los errores en una base de datos.
+        //die('Error de base de datos: ' . $e->getMessage());
+        return false;
     }
+}
 
 $primeraVez = true;
 /**
 Esta función hace demasiadas cosas
 debo eliminar el verifica si la variable de sesion existe, ahora comprobamaremos del fichero/bbdd
-
-**/
-function creayValidaConexion1(string $nombre, string $password, string $campo, array &$errores, string $nombreCompleto, string $correoElectronico,string $imagen,string $idioma)
+ **/
+function encriptar($password, $cost = 10)
+{
+    return password_hash($password, PASSWORD_DEFAULT, ['cost' => $cost]);
+}
+function crearCuenta(string $nombre, string $password, string $campo, array &$errores, string $nombreCompleto, string $correoElectronico, string $imagen, string $idioma, string $descripcion, string $cFecha)
 {
     session_start();
+    $nivel = 1;
 
-    $tieneError = 0;
+    include('../config/config.php');
+    // Utilizamos prepared statements para evitar la inyección SQL
+    $sql = "SELECT email FROM usuario WHERE email = :email";
+    ////////////////
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $correoElectronico);
+    //$stmt->bindParam(':password', $password);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //SI QUE FUNCIONA
+    if (!$result) {
+        $sql = "INSERT INTO usuario (nombre, email, pass, f_nacimiento, foto_perfil, descripcion, nivel)
+        VALUES (:nombre, :email, :pass, :f_nacimiento, :foto_perfil, :descripcion, :nivel)";
 
-    // Verifica si la variable de sesión 'usuarios' existe
-    if (isset($_SESSION['usuarios'])) {
-        $datosSesion = $_SESSION['usuarios']; // Obtiene la variable de sesión 'usuarios'
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':email', $correoElectronico);
+        $stmt->bindParam(':nivel', $nivel);
 
-        foreach ($datosSesion as $subarray) {
-            // Verifica si el valor existe en el subarray "usuario"
-            if (isset($subarray["usuario"]) && $subarray["usuario"] === $nombre) {
-                // El valor se encontró en el subarray "usuario"
-                $tieneError++;
-            }
-        }
-    }
+        $password = encriptar($password, 10); // password_hash($password, PASSWORD_DEFAULT);//Usar la funcion de encriptar seguridad.php
+        $stmt->bindParam(':pass', $password);
+        $stmt->bindParam(':f_nacimiento', $cFecha);
+        $stmt->bindParam(':foto_perfil', $imagen);
+        $stmt->bindParam(':descripcion', $descripcion);
 
-    if ($tieneError >= 1) {
-        return false;
+        $stmt->execute();
+        //$stmt->commit();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $token = bin2hex(random_bytes(64));
+        //Insertar el token en la tabla
+        //$pdo->lastInsertID
+        $id = $pdo->lastInsertId();
+        $validez = time() + 86400; //Cambiar la validez
+        $sql = "INSERT INTO tokens (token, validez, id_user) VALUES (:token, :validez, :id_user)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':validez', $validez); //24 Horas
+        $stmt->bindParam(':id_user', $id); //24 Horas
+        $stmt->execute();
+        $errores['mensajeCorreo'] = "Por favor, revise su correo para activar la cuenta";
+        return $token;
     } else {
-        $_SESSION["username"] = $nombre;
-        $_SESSION["password"] = $password;
-        $_SESSION["nombreCompleto"] = $nombreCompleto;
-        $_SESSION["correoElectronico"] = $correoElectronico;
-        $_SESSION["foto"] = $imagen;
-        $_SESSION["idioma"] = $idioma;
-
-        $datos = array(
-            "usuario" => $nombre,
-            "datos" => array(
-                "username" => $nombre,
-                "password" => $password,
-                "nombreCompleto" => $nombreCompleto,
-                "correoElectronico" => $correoElectronico,
-                "foto"=>$imagen,
-                "idioma"=> $idioma
-            )
-        );
-
-        if (isset($datosSesion) && is_array($datosSesion)) {
-            // Si la variable de sesión 'usuarios' existe y es un array, agrega $datos a $datosSesion
-            $datosSesion[] = $datos;
-        } else {
-            // Si la variable de sesión 'usuarios' no existe o no es un array, crea un nuevo array
-            $datosSesion = array($datos);
-        }
-
-        $_SESSION["usuarios"] = $datosSesion;
-        //NUEVA FUNCIONALIDAD GUARDAMOS LOS DATOS EN UN FICHERO
-        $archivo="../almacenamientoFicheros/usuarios.txt";
-        if (is_file($archivo)) {
-            $fp = fopen($archivo, "r");
-            $escribir = fopen($archivo, "a");
-            while (!feof($fp)){
-                //Lectura
-                $linea = fgets($fp);                                     
-            }
-            $fecha_actual = date("Y-m-d H:i:s");
-            fwrite($escribir, $nombreCompleto."?".$password."?".$nombre."?".$correoElectronico."?".$imagen."?".$idioma."?".$fecha_actual.PHP_EOL); 
-            fclose($fp);
-            fclose($escribir);
-            
-        }else{
-            //Si no que cree el archivo
-        }
-        return true;
+        $errores['errorBD'] = "El correo electrónico ya está registrado";
     }
+}
+function comprobarhash($pass, $passBD)
+{
+    // Primero comprobamos si se ha empleado una contraseña correcta:
+    return password_verify($pass, $passBD);
 }
 
 
-function creayValidaConexion(string $correoElectronico, string $password, string $campo,array &$errores){
+function creayValidaConexion(string $correoElectronico, string $password, string $campo, array &$errores)
+{
     session_start();
-    $valido=false;
-    $archivo="../almacenamientoFicheros/usuarios.txt";
-    $fp = fopen($archivo, "r");
-    while (!feof($fp)){
-        //Lectura
-        $linea = fgets($fp);   
-        $datos = explode('?', $linea);  
-        $correo = $datos[3];
-        $contrasenia = $datos[1];   
-        // Almacena los datos en el array de usuarios
-        if ($correo == $correoElectronico && $contrasenia == $password) {
-            //Para guardar en logLogin
-            $fecha_actual = date("Y-m-d H:i:s");
-            $archivo="../almacenamientoFicheros/logLogin.txt";
-            $escribir = fopen($archivo, "a");
-            fwrite($escribir, $correoElectronico." ".$password." ".$fecha_actual.PHP_EOL);
-            fclose($escribir);
-            //fwrite($escribir, $nombreCompleto."?".$password."?".$nombre."?".$correoElectronico."?".$imagen."?".$idioma.PHP_EOL); 
-            $_SESSION["nombreCompleto"] = $datos[0];
-            $_SESSION["password"] = $datos[1];
-            $_SESSION["username"] = $datos[2];
-            $_SESSION["correoElectronico"] = $datos[3];
-            $_SESSION["foto"] = $datos[4];
-            $_SESSION["idioma"] = $datos[5];
-             //Ponemos a time() el contador de inactividad
-            $_SESSION["timeout"]=time();
-            // Obtiene la dirección IP real del cliente detrás de un proxy
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $_SESSION['ip']=$ip;
-            return true; // Las credenciales coinciden
-        }
-        }
-        /*
-        $usuarios[] = array(
-            "correoElectronico" => $correo,
-            "contrasenia" => $contrasenia
-        );*/
-    
-   if($valido===false){
-        $errores['username/password'] = 'Nombre de usuario o contraseña incorrectos';
-        //Escribe el usuairo y contraseña y fecha actual en el archivo logLogin.txt
-        $fecha_actual = date("Y-m-d H:i:s");
-        $archivo="../almacenamientoFicheros/logLogin.txt";
-        $escribir = fopen($archivo, "a");
-        fwrite($escribir, $correoElectronico." ".$password." ".$fecha_actual.PHP_EOL);
-        fclose($escribir);
-        return false;
-    }
-
-    
-    /*
-    foreach ($usuarios as $usuario) {
-        $correo = $usuario["correoElectronico"];
-        $contrasenia = $usuario["contrasenia"];
-        if ($correo == $correoElectronico && $contrasenia == $password) {
-            //Volver abrir el archivo para acceder a la informacion del usuario o posiicon del usuairo
-            $_SESSION["correoElectronico"] = $correoElectronico;
-            $_SESSION["password"] = $password;
-            $_SESSION["nombreCompleto"] = $usuario['datos']['nombreCompleto'];
-            $_SESSION["username"] = $usuario['datos']['username'];
-            $_SESSION["foto"] = $usuario['datos']['foto'];
-            $_SESSION["idioma"] = $usuario['datos']['idioma'];
-            return true; // Las credenciales coinciden
-        }else{
-            $errores['username/password'] = 'Nombre de usuario o contraseña incorrectos';
-            //Escribe el usuairo y contraseña y fecha actual en el archivo logLogin.txt
-            $fecha_actual = date("Y-m-d H:i:s");
-            $archivo="../almacenamientoFicheros/logLogin.txt";
-            $escribir = fopen($archivo, "a");
-            fwrite($escribir, $correoElectronico." ".$password." ".$fecha_actual.PHP_EOL);
-            fclose($escribir);
+    include('../config/config.php');
+    // Utilizamos prepared statements para evitar la inyección SQL
+    $sql = "SELECT * FROM usuario WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $correoElectronico);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Verificamos si hay algún registro
+    if ($result !== false) {
+        // Accedemos al email del primer registro (ya que la consulta devuelve todos los registros que cumplan con las condiciones)
+        $activo = $result['activo'];
+        $contraseniaBd = $result['pass'];
+        //Compruebo que la cuenta sea activa 
+        if ($activo === 1) {
+            if (comprobarhash($password, $contraseniaBd)) {
+                //Para guardar en logLogin
+                $fecha_actual = date("Y-m-d H:i:s");
+                $archivo = "../almacenamientoFicheros/logLogin.txt";
+                $escribir = fopen($archivo, "a");
+                fwrite($escribir, $correoElectronico . " " . $password . " " . $fecha_actual . PHP_EOL);
+                fclose($escribir);
+                //fwrite($escribir, $nombreCompleto."?".$password."?".$nombre."?".$correoElectronico."?".$imagen."?".$idioma.PHP_EOL); 
+                $_SESSION["nombreCompleto"] = $result['nombre'];
+                $_SESSION["password"] = $result['pass'];
+                //        $_SESSION["username"] = $datos[2];
+                $_SESSION["correoElectronico"] = $result['email'];
+                $_SESSION["foto"] = $result['foto_perfil'];
+                $_SESSION["descripcion"] = $result['descripcion'];
+                //$_SESSION["idioma"] = $datos[5];
+                //Ponemos a time() el contador de inactividad
+                $_SESSION["timeout"] = time();
+                // Obtiene la dirección IP real del cliente detrás de un proxy
+                $ip = $_SERVER['REMOTE_ADDR'];
+                $_SESSION['ip'] = $ip;
+                return true; // Las credenciales coinciden
+            } else {
+                $errores['errorBD'] = "El usuario o contraseña no son correctos";
+                return false;
+            }
+        } else {
+            $errores['errorBD'] = "El usuario no está activo, por favor, revise su correo para activar la cuenta";
             return false;
         }
-    }*/        
-}
-
-function creayValidaConexion2(string $correoElectronico, string $password, string $campo, array &$errores, string $idioma, string $imagen) {
-    session_start();
-    $archivo = "../almacenamientoFicheros/usuarios.txt";
-    $lineas = file($archivo, FILE_IGNORE_NEW_LINES); // Leer todas las líneas del archivo en un array
-
-    foreach ($lineas as $indice => $linea) {
-        $datos = explode('?', $linea);
-        $correo = $datos[3];
-        $contrasenia = $datos[1];
-
-        // Verificar credenciales
-        if ($correo === $correoElectronico) {
-            $fecha_actual = date("Y-m-d H:i:s");
-            // Modificar la línea actual en el array            
-            $lineas[$indice] = $_SESSION["nombreCompleto"] . "?" .$password . "?" . $_SESSION["username"] . "?" . $_SESSION["correoElectronico"] . "?".$imagen."?" .$idioma . "?" . $fecha_actual;
-            // Escribir el contenido actualizado de vuelta al archivo
-            file_put_contents($archivo, implode(PHP_EOL, $lineas));
-            $_SESSION["nombreCompleto"] = $datos[0];
-            $_SESSION["password"] = $password;
-            $_SESSION["username"] = $datos[2];
-            $_SESSION["correoElectronico"] = $datos[3];
-            $_SESSION["foto"] = $imagen;
-            $_SESSION["idioma"] = $idioma;
-            
-            return true; // Credenciales válidas
-        }
+    } else {
+        // No se encontraron registros
+        $errores['errorBD'] = "No se encontró el usuario con el correo electrónico y la contraseña ingresados.";
+        return false;
     }
 }
 
+function creayValidaConexion2(string $correoElectronico, string $password, string $campo, array &$errores, string $idioma, string $imagen, string $descripcionPersonal)
+{
+    session_start();
+    include('../config/config.php');
 
-function calcularFecha(string $fechaNacimiento,string $campo,array &$errores)
+    $sql = "SELECT * FROM usuario WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $correoElectronico);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $contraseniaBd = $result['pass'];
+
+    // Comprobamos si las contraseñas son iguales
+    if ($password === $contraseniaBd) {
+        // Las contraseñas son iguales, actualizamos sin cambiar la contraseña
+        $sql = "UPDATE usuario SET descripcion = :descripcion, foto_perfil = :foto_perfil WHERE email = :email";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $correoElectronico);
+        $stmt->bindParam(':foto_perfil', $imagen);
+        $stmt->bindParam(':descripcion', $descripcionPersonal);
+        $stmt->execute();
+        $_SESSION['imagen'] = $imagen;
+        $_SESSION['descripcion'] = $descripcionPersonal;
+    } else {
+        // Las contraseñas son distintas, actualizamos con la nueva contraseña
+        $sql = "UPDATE usuario SET pass = :pass, descripcion = :descripcion, foto_perfil = :foto_perfil WHERE email = :email";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $correoElectronico);
+        $password = encriptar($password, 10);
+        $stmt->bindParam(':pass', $password);
+        $stmt->bindParam(':foto_perfil', $imagen);
+        $stmt->bindParam(':descripcion', $descripcionPersonal);
+        $stmt->execute();
+        $_SESSION["password"] = $password;
+        $_SESSION['foto'] = $imagen;
+        $_SESSION['descripcion'] = $descripcionPersonal;
+    }
+
+    // No es necesario realizar un fetch después de una operación UPDATE.
+    // Además, las operaciones UPDATE no devuelven registros.
+
+    // Finalmente, puedes retornar algo según tus necesidades
+
+    return true; // Operación exitosa, por ejemplo
+}
+
+function calcularFecha(string $fechaNacimiento, string $campo, array &$errores)
 {
     // Calcula la edad a partir de la fecha de nacimiento
     $fechaNacimientoTimestamp = strtotime($fechaNacimiento);
@@ -428,15 +441,15 @@ function calcularFecha(string $fechaNacimiento,string $campo,array &$errores)
     } else {
         $errores[$campo] = 'El usuario es menor y no puede crearse una cuenta';
         return false;
-        
     }
 }
-function comprobarCorreo(string $correoElectronico,string $campo,array &$errores){
+function comprobarCorreo(string $correoElectronico, string $campo, array &$errores)
+{
     if (filter_var($correoElectronico, FILTER_VALIDATE_EMAIL)) {
         return true;
     } else {
         $errores[$campo] = 'El correo no es correcto';
-    return false;
+        return false;
     }
 }
 
@@ -463,8 +476,6 @@ function cRadio(string $text, string $campo, array &$errores, array $valores, bo
     }
     $errores[$campo] = "Error en el campo $campo";
     return false;
-
-
 }
 
 /**
@@ -495,7 +506,6 @@ function cCheck(array $text, string $campo, array &$errores, array $valores, boo
             $errores[$campo] = "Error en el campo $campo";
             return false;
         }
-
     }
     return true;
 }
@@ -515,73 +525,63 @@ function cCheck(array $text, string $campo, array &$errores, array $valores, boo
  * @param boolean $required
  * @return boolean|string
  */
-function cFile(string $nombre, array &$errores, array $extensionesValidas, string $directorio, int  $max_file_size,  bool $required = false)
+function cFile(string $nombre, array &$errores, array $extensionesValidas, string $directorio, int  $max_file_size,  bool $required = TRUE): bool|string
 {
-    $nombreArchivo = $_FILES['imagen']['name'];
-
-   // $_FILES["archivo"];
     // Caso especial que el campo de file no es requerido y no se intenta subir ningun archivo
     if ((!$required) && $_FILES[$nombre]['error'] === 4)
-        return  "../imagenesUsuario/dump.jpg";
-    // En cualquier otro caso se comprueban los errores del servidor 
+        return true;
+    // En cualquier otro caso se comprueban los errores del servidor
     if ($_FILES[$nombre]['error'] != 0) {
         $errores["$nombre"] = "Error al subir el archivo " . $nombre . ". Prueba de nuevo";
         return false;
     } else {
-
-        $nombreArchivo = strip_tags($_FILES[$nombre]['name']);
+        $nombreArchivo = strip_tags($_FILES["$nombre"]['name']);//= ""
         /*
              * Guardamos nombre del fichero en el servidor
-            */
-        $directorioTemp = $_FILES["$nombre"]['tmp_name'];
+        */
+        $directorioTemp = $_FILES["$nombre"]['tmp_name'];//= null
         /*
              * Calculamos el tamaño del fichero
             */
-        $tamanyoFile = filesize($directorioTemp);
-        
+        $tamanyoFile = filesize($directorioTemp);//= false
         /*
             * Extraemos la extensión del fichero, desde el último punto.
-            */
-        $extension = strtolower(pathinfo($nombreArchivo, PATHINFO_EXTENSION));
-
+        */
+        $extension = strtolower(pathinfo($nombreArchivo, PATHINFO_EXTENSION));//=""
         /*
             * Comprobamos la extensión del archivo dentro de la lista que hemos definido al principio
-            */
+        */
         if (!in_array($extension, $extensionesValidas)) {
             $errores["$nombre"] = "La extensión del archivo no es válida";
             return false;
         }
         /*
             * Comprobamos el tamaño del archivo
-            */
+        */
         if ($tamanyoFile > $max_file_size) {
             $errores["$nombre"] = "La imagen debe de tener un tamaño inferior a $max_file_size kb";
             return false;
         }
-
         // Almacenamos el archivo en ubicación definitiva si no hay errores ( al compartir array de errores TODOS LOS ARCHIVOS tienen que poder procesarse para que sea exitoso. Si cualquiera da error, NINGUNO  se procesa)
-
         if (empty($errores)) {
-            /**
-             * Comprobamos si el directorio pasado es válido
-             */
+            /*
+                * Comprobamos si el directorio pasado es válido
+            */
             if (is_dir($directorio)) {
-                /**
-             * Tenemos que buscar un nombre único para guardar el fichero de manera definitiva.
-             * Podemos hacerlo de diferentes maneras, en este caso se hace añadiendo microtime() al nombre del fichero 
-             * si ya existe un archivo guardado con ese nombre.
-             * */
+                /*
+                    * Tenemos que buscar un nombre único para guardar el fichero de manera definitiva.
+                    * Podemos hacerlo de diferentes maneras, en este caso se hace añadiendo microtime() al nombre del fichero
+                    * si ya existe un archivo guardado con ese nombre.
+                **/
                 $nombreArchivo = is_file($directorio . DIRECTORY_SEPARATOR . $nombreArchivo) ? time() . $nombreArchivo : $nombreArchivo;
                 $nombreCompleto = $directorio . DIRECTORY_SEPARATOR . $nombreArchivo;
-                /**
-                 * Movemos el fichero a la ubicación definitiva.
+                /*
+                    * Movemos el fichero a la ubicación definitiva.
                  * */
                 if (move_uploaded_file($directorioTemp, $nombreCompleto)) {
-                    /**
-                     * Si todo es correcto devuelve la ruta y nombre del fichero como se ha guardado
+                    /*
+                        * Si todo es correcto devuelve la ruta y nombre del fichero como se ha guardado
                      */
-
-
                     return $nombreCompleto;
                 } else {
                     $errores["$nombre"] = "Ha habido un error al subir el fichero";
@@ -592,11 +592,7 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
                 return false;
             }
         }
-        return true;
-
     }
 }
-
-
 
 ?>

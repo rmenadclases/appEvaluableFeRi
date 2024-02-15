@@ -7,4 +7,5 @@ if (isset($_REQUEST['btnAceptarCookies'])&& !isset($_COOKIE['cookieAceptada'])) 
 header('Location: ' . $_SERVER['HTTP_REFERER']);//Esto hace que devuelva a la página de donde ha sido llamada
 exit();
 }
+
 ?>

@@ -3,6 +3,9 @@ if(!isset($_SESSION)){
     session_start();
     // Resto de tu código...
 }
+require_once '../libs/bGeneral.php';
+
+
 
 ?>
 <!DOCTYPE html>
@@ -10,6 +13,7 @@ if(!isset($_SESSION)){
     data-turbo-loaded="">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesion</title>
 
 <head>
     <style type="text/css">
@@ -84,6 +88,15 @@ if(!isset($_SESSION)){
                 if (isset($_SESSION['sesionCaducada'])): ?>
                 <p class="errores"><?=$_SESSION['sesionCaducada']?></p><br>
                 <?php endif; ?>
+                <?php
+                if  (isset($errores['errorBD'])): ?>
+                <p class="errores"><?=$errores['errorBD']?></p><br>
+                <?php endif; ?>
+                <?php
+                if  (isset($errores['mensajeCorreo'])): ?>
+                <p class="errores"><?=$errores['mensajeCorreo']?></p><br>
+                <?php endif; ?>
+
                 
             </form>
         </div>

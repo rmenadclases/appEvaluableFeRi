@@ -1,0 +1,2 @@
+SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)## Fichero: G:\XAMPP\htdocs\DWES\ProyectoMiRama\appEvaluableFeRi\config\crearBD.php## Línea: 19##Código: 1045##Instante: 0.18525300 1702460993
+SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)## Fichero: C:\xampp\htdocs\DWES\MiRama\appEvaluableFeRi\config\crearBD.php## Línea: 19##Código: 1045##Instante: 0.43944300 1704262868

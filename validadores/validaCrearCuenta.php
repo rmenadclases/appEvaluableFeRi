@@ -30,13 +30,16 @@ if (isset($_REQUEST['bRegistro'])) {
                 */
 
             $file = cfile("imagen", $errores, $extensionesValidas, $dir, $max_file_size);            
-            if (creayValidaConexion1($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file, $idiomaString)) {
-                $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión
+            
+            if ($token=crearCuenta($nombre, $password, "username/password", $errores, $nombreCompleto, $correoElectronico, $file, $idiomaString,$descripcionPersonal,$fechaNacimiento)) {
+                mandarMensaje($token,$correoElectronico);
+                $usuarios = $_SESSION['usuarios']; // Obtiene los datos de usuarios de la sesión                
                 header("location: ../plantilla/Login.php"); // Redirige al usuario
                 $primeraVez = false;
             } else {
                 //include('../crearCuenta.php');
                 //include('../crearCuenta.php');
+                
                 include('../plantilla/crearCuenta.php');
             }
         }
@@ -45,4 +48,8 @@ if (isset($_REQUEST['bRegistro'])) {
     }
 }
 
+
+function mandarMensaje($token,$correoElectronico){
+    include('../ejemploPHPMailer.php');
+}
 ?>

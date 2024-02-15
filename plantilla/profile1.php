@@ -63,7 +63,7 @@
                     <?php
                     //sESSIOSession por inaxtividad
                     session_start();
-                    $inactividad = 600;
+                    $inactividad = 1800;
 // Comprobar si $_SESSION["timeout"] está establecida
 if(isset($_SESSION["timeout"])){
     // Calcular el tiempo de vida de la sesión
@@ -102,12 +102,42 @@ Intentar no poner en las plantillas tanto código
                     }
 
                     ?>
-
-                   
                     </div>
                     <br>
                     <a href="../validadores/cerrarSesion.php" class="centrarUno"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>
                     <br>
+                    <form method="post">
+                <?php
+               require_once '../libs/componentes.php';
+               require_once '../recogeryValidar.php';
+                echo '<div class="centrar">';
+                echo pintaRadio($colores, "colores") . '</div>';
+                ?>
+                <input type="submit" value="Cambiar Color">
+            </form>
+            <?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificar si se ha seleccionado un color
+    if (isset($_POST["colores"])) {
+        $color = $_POST["colores"];
+        
+            if($color==="normal"){
+                header("location: profile1.php");
+                exit(); // Asegurarse de que no se ejecute más código después de la redirección
+            }else{
+                $css =  htmlspecialchars($color) . ".php";
+                // Redirigir a la misma página con un parámetro en la URL que indica el color seleccionado
+                header("location: profile" . urlencode($css));
+                exit(); // Asegurarse de que no se ejecute más código después de la redirección
+            }
+        }else{
+            header("location: profile1.php");
+            exit(); // Asegurarse de que no se ejecute más código después de la redirección
+        }
+    }
+            ?>
+                    
+                    <br><br>
                     <?php 
                     if (!isset($_COOKIE['cookieAceptada'])) {
                         echo '<div class="centrar">';
@@ -133,6 +163,9 @@ Intentar no poner en las plantillas tanto código
 </script>
 
 <style>
+    input{
+        background-color: white;
+    }
     .centrarUno{
         display: flex;
         justify-content: center;

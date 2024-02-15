@@ -1,11 +1,12 @@
 <?php
 
+session_start();
 include('../libs/bGeneral.php');
 include('../config/config.php');
 
 $errores = [];
 
-// Compruebo si se ha pulsado el botón del formulario de crear cuenta
+// Compruebo si se ha pulsado el botón del formulario de crear servicio
 if (isset($_REQUEST['bServicio'])) {
     // Recoge los datos del formulario
     $titulo = recoge("titulo");
@@ -15,16 +16,8 @@ if (isset($_REQUEST['bServicio'])) {
     $precioPorHora = recoge("precio_por_hora");
     $ubicacion = recoge("ubicacion");
     $disponibilidad = recogeArray("servicios");
-    $imagen = recoge("imagen");
-
-    //Manejo la carga de la foto
-   /* $foto = $_FILES["foto"]["name"]; //aqui se obtiene el nombre de la foto
-    $ruta_temporal = $_FILES["foto"]["tmp_name"]; //aqui se obtiene la ruta temporal
-    $ruta_final = "../imagenesServicios" . basename($foto);*/
-
     
-
-    // Realiza las validaciones necesarias en el archivo de validación
+    // Validaciones
     if (empty($titulo)) {
         $errores["titulo"] = "El título es obligatorio.";
     }
@@ -49,25 +42,24 @@ if (isset($_REQUEST['bServicio'])) {
         $errores["disponibilidad"] = "Debes seleccionar al menos una disponibilidad.";
     }
 
+    //Validación y manejo de la imagen
+
+       
+    $imagen=cFile('foto',$errores,$extensionesValidas,$dir,$max_file_size,false);
+   
+    //Llama a la función para procesar y guardar el formulario
     if (empty($errores)) {
-        // Realiza las acciones que deseas cuando todas las validaciones son correctas
-        // Llama a la función para procesar y guardar el formulario
-        if ($_FILES['imagen']['error'] != 0) {
-            $errores["imagen"] = "Error en la imagen";
-        }
-        $file = cfile($imagen, $errores, $extensionesValidas, $dir, $max_file_size);
-        if ($file == false) {
-            $file = "../imagenesUsuario/dump.jpg";
-        }
-        if (crearServicio($titulo, $categoria, $descripcion, $tipo, $precioPorHora, $ubicacion, $disponibilidad, $file)) {
-            header('location:../plantilla/profile1.php');
+        
+        $correoElectronico=$_SESSION['correoElectronico'];
+        if ( crearServicio($titulo, $categoria, $descripcion, $tipo, $precioPorHora, $ubicacion, $disponibilidad, $imagen,$correoElectronico)) {
+            header('Location:../plantilla/profile1.php');
+            exit;    
         } else {
-            include('location:../plantilla/formServicios.php');
-        }
+            header('Location:../plantilla/formServicios.php');
+            exit;
+        }        
     } else {
-        // Si hay errores en la validación, muestra el formulario con los errores
         include('../plantilla/formServicios.php');
     }
-}
     
-?>
+}

