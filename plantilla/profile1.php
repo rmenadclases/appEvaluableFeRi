@@ -80,42 +80,41 @@ header("Location: ../plantilla/login.php");
     $_SESSION["timeout"]=time();
 }
 }
-/**
-Intentar no poner en las plantillas tanto código
-**/
-                    //aquí mostramos los títulos de los servicios que se han creado en el archivo servicios.txt
-                    $rutaArchivo = "../almacenamientoFicheros/servicios.txt";
 
-                    if (is_file($rutaArchivo)) {
-                        $servicios = file($rutaArchivo, FILE_IGNORE_NEW_LINES);
 
-                        foreach ($servicios as $servicio) {
-                            //Dividimos la línea del servicio en partes usando el separador ":"
-                            $partes = explode(":", $servicio);
-                            //Comprobamos si hay partes y si la primera parte es el Título
-                            if (!empty($partes) && trim($partes[0]) == "Título") {
-                                echo '<p style="color: white;">' . trim($partes[1]) . '</p>';
-                            }
-                        }
-                    } else {
-                        echo '<p style="color:white;">No hay servicios disponibles. Debes crear uno</p>';
-                    }
+        //aquí mostramos los títulos de los servicios que se han creado en el archivo servicios.txt
+        $rutaArchivo = "../almacenamientoFicheros/servicios.txt";
 
-                    ?>
-                    </div>
-                    <br>
-                    <a href="../validadores/cerrarSesion.php" class="centrarUno"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>
-                    <br>
-                    <form method="post">
-                <?php
-               require_once '../libs/componentes.php';
-               require_once '../recogeryValidar.php';
-                echo '<div class="centrar">';
-                echo pintaRadio($colores, "colores") . '</div>';
-                ?>
-                <input type="submit" value="Cambiar Color">
-            </form>
-            <?php
+        if (is_file($rutaArchivo)) {
+            $servicios = file($rutaArchivo, FILE_IGNORE_NEW_LINES);
+
+            foreach ($servicios as $servicio) {
+                //Dividimos la línea del servicio en partes usando el separador ":"
+                $partes = explode(":", $servicio);
+                //Comprobamos si hay partes y si la primera parte es el Título
+                if (!empty($partes) && trim($partes[0]) == "Título") {
+                    echo '<p style="color: white;">' . trim($partes[1]) . '</p>';
+                }
+            }
+        } else {
+            echo '<p style="color:white;">No hay servicios disponibles. Debes crear uno</p>';
+        }
+
+        ?>
+        </div>
+        <br>
+        <a href="../validadores/cerrarSesion.php" class="centrarUno"><button class="btnCerrar" style="background-color: white; name='cSesion'">Cerrar Sesion</button></a>
+        <br>
+        <form method="post">
+    <?php
+    require_once '../libs/componentes.php';
+    require_once '../recogeryValidar.php';
+    echo '<div class="centrar">';
+    echo pintaRadio($colores, "colores") . '</div>';
+    ?>
+    <input type="submit" value="Cambiar Color">
+</form>
+<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verificar si se ha seleccionado un color
     if (isset($_POST["colores"])) {

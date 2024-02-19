@@ -595,4 +595,33 @@ function cFile(string $nombre, array &$errores, array $extensionesValidas, strin
     }
 }
 
+//funcion para obtener los titulos de los servicios desde la base de datos
+function obtenerTitulosServicios($idUsuario){
+    $servicios = array();
+
+    $sql = "SELECT titulo, descripcion, tipo FROM servicios WHERE id_user != :idUsuario ORDER BY fecha_alta DESC";
+
+    $stmt = $pdo->prepare($sql);  //Preparamos la consulta SQL
+    $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);   //Obtenemos todos los resultados
+
+    $_SESSION["titulo"] = array();
+    $_SESSION["descripciones"] = array();
+    $_SESSION["tipos"] = array();
+
+    // Iteramos sobre los resultados y almacenamos los títulos en la sesión
+    if ($result) {
+        foreach ($result as $fila) {
+        $_SESSION["titulo"][] = $fila['titulo'];
+        $_SESSION["descripciones"][] = $fila['descripcion'];
+        $_SESSION["tipos"][] = $fila['tipo'];
+        }
+    } else {
+        echo '<p style="color: white;">No hay servicios disponibles. Debes crear uno</p>';
+    }
+    return $servicios;
+}
+
 ?>

@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="height-full" data-a11y-animated-images="system" data-a11y-link-underlines="true" data-turbo-loaded="">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <style type="text/css">
+        .turbo-progress-bar {
+            position: fixed;
+            display: block;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: #0076ff;
+            z-index: 2147483647;
+            transition:
+                width 300ms ease-out,
+                opacity 150ms 150ms ease-in;
+            transform: translate3d(0, 0, 0);
+        }
+    </style>
+
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-0cdc607a5517.css">
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/signup-7e1ca87bf103.css">
+
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/site-c93c61a95471.css">
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/home-8b6943daec72.css">
 </head>
-<body>
+
+<body class="logged-out env-production page-responsive height-full d-flex flex-column header-overlay intent-mouse" style="overflow-wrap: break-word; background-image: url('https://github.githubassets.com/assets/hero-glow-f6eed469bca2.svg'); background-size: cover;" cz-shortcut-listen="true">
+
+    <div class="application-main d-flex flex-auto flex-column" data-commit-hovercards-enabled="" data-discussion-hovercards-enabled="" data-issue-and-pr-hovercards-enabled="">
+
+        <main class="js-warp-hide bg-gray-dark-mktg d-flex flex-auto flex-column overflow-hidden position-relative">
+            <div class="form-container signup-space">
+                <div class="signup-stars"></div>
+                <div class="signup-stars"></div>
+                <div class="signup-stars"></div>
+                <div class="signup-stars"></div>
+                <div class="signup-stars"></div>
+                <div class="signup-stars"></div>
+            </div>
+
+            <img src="https://github.githubassets.com/assets/hero-glow-f6eed469bca2.svg" alt="Glowing universe" class="js-warp-hide position-absolute overflow-hidden home-hero-glow events-none">
+        </main>
+    </div>
 <div class="container">
         <div class="signup-space">
             <div class="logo-container">
@@ -126,7 +163,6 @@
         /* Evita que el contenido se rompa al ajustar el ancho */
         max-width: 100%;
         /* Limita el ancho máximo del contenido al tamaño de la ventana */
-        background:red;
     }
 
     * {
